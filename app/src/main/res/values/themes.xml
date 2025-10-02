@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Basic theme for Plink - Material 3 styling handled in Compose -->
+    <style name="Theme.Plink" parent="android:Theme.Material.Light.NoActionBar">
+        <!-- Enable edge-to-edge display -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    </style>
+</resources>

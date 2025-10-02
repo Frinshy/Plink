@@ -1,0 +1,32 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    
+    <!-- Main coin shape with Material 3 styling -->
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M54,54m-28,0a28,28 0,1 1,56 0a28,28 0,1 1,-56 0" />
+    
+    <!-- Inner ring for depth -->
+    <path
+        android:fillColor="#FFF8DC"
+        android:pathData="M54,54m-24,0a24,24 0,1 1,48 0a24,24 0,1 1,-48 0" />
+    
+    <!-- Center circle -->
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M54,54m-20,0a20,20 0,1 1,40 0a20,20 0,1 1,-40 0" />
+    
+    <!-- Letter "P" for Plink - Material 3 typography inspired -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M44,40L44,68L48,68L48,56L56,56C60,56 62,54 62,50L62,46C62,42 60,40 56,40L44,40ZM48,44L56,44C57,44 58,45 58,46L58,50C58,51 57,52 56,52L48,52L48,44Z" />
+    
+    <!-- Subtle highlight for 3D effect -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.3"
+        android:pathData="M40,40L54,26C66,26 76,36 76,48C76,52 75,56 73,59L54,40L40,40Z" />
+</vector>

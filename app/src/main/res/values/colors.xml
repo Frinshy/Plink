@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Material 3 Dynamic Colors -->
+    <!-- These are fallback colors when dynamic colors are not available -->
+
+    <!-- Primary colors -->
+    <color name="md_theme_light_primary">#0052CC</color>
+    <color name="md_theme_light_onPrimary">#FFFFFF</color>
+    <color name="md_theme_light_primaryContainer">#D6E7FF</color>
+    <color name="md_theme_light_onPrimaryContainer">#001B3E</color>
+
+    <color name="md_theme_dark_primary">#A8CFFF</color>
+    <color name="md_theme_dark_onPrimary">#003064</color>
+    <color name="md_theme_dark_primaryContainer">#004494</color>
+    <color name="md_theme_dark_onPrimaryContainer">#D6E7FF</color>
+
+    <!-- Secondary colors -->
+    <color name="md_theme_light_secondary">#5A5FAD</color>
+    <color name="md_theme_light_onSecondary">#FFFFFF</color>
+    <color name="md_theme_light_secondaryContainer">#E1E0FF</color>
+    <color name="md_theme_light_onSecondaryContainer">#151866</color>
+
+    <color name="md_theme_dark_secondary">#BFC2FF</color>
+    <color name="md_theme_dark_onSecondary">#2A2F7C</color>
+    <color name="md_theme_dark_secondaryContainer">#414794</color>
+    <color name="md_theme_dark_onSecondaryContainer">#E1E0FF</color>
+
+    <!-- Tertiary colors -->
+    <color name="md_theme_light_tertiary">#8C4A00</color>
+    <color name="md_theme_light_onTertiary">#FFFFFF</color>
+    <color name="md_theme_light_tertiaryContainer">#FFDBB8</color>
+    <color name="md_theme_light_onTertiaryContainer">#2B1400</color>
+
+    <color name="md_theme_dark_tertiary">#FFB870</color>
+    <color name="md_theme_dark_onTertiary">#4A2600</color>
+    <color name="md_theme_dark_tertiaryContainer">#6A3700</color>
+    <color name="md_theme_dark_onTertiaryContainer">#FFDBB8</color>
+
+    <!-- Game-specific colors -->
+    <color name="coin_gold">#FFD700</color>
+    <color name="coin_gold_dark">#B8860B</color>
+    <color name="success_green">#00A86B</color>
+    <color name="warning_amber">#FF8F00</color>
+</resources>
