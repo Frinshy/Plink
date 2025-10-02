@@ -13,6 +13,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 /** Repository for persisting game data using DataStore Preferences. */
+// Keep a single DataStore instance per application by declaring the extension
+// on Context at file-level. This ensures everyone uses the same DataStore
+// backing file instead of creating multiple instances for the same file.
+private val Context.dataStore by preferencesDataStore(name = "game_preferences")
+
 class GameRepository(private val context: Context) {
 
     companion object {
@@ -24,10 +29,13 @@ class GameRepository(private val context: Context) {
         private val TOTAL_COINS_EARNED_KEY = longPreferencesKey("total_coins_earned")
     }
 
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "game_preferences")
+    // Use the application context's DataStore to avoid creating multiple
+    // DataStore instances when different Contexts (like Activity, Service,
+    // or Glance's session worker) are passed in.
+    private val dataStore: DataStore<Preferences> by lazy { context.applicationContext.dataStore }
 
     /** Flow of the current merged [GameState] derived from DataStore. */
-    val gameState: Flow<GameState> = context.dataStore.data.map { preferences ->
+    val gameState: Flow<GameState> = dataStore.data.map { preferences ->
         val upgrades = mutableMapOf<String, Int>()
         // Read upgrade levels via generic keys only
         upgrades["tap_upgrade"] = preferences[upgradeKeyFor("tap_upgrade")] ?: 0
@@ -43,7 +51,7 @@ class GameRepository(private val context: Context) {
 
     /** Add `amount` to the stored coin balance and total earned. */
     suspend fun addCoins(amount: Long) {
-        context.dataStore.edit { preferences ->
+        dataStore.edit { preferences ->
             val currentCoins = preferences[COINS_KEY] ?: 0L
             val currentTotal = preferences[TOTAL_COINS_EARNED_KEY] ?: 0L
             preferences[COINS_KEY] = currentCoins + amount
@@ -55,7 +63,7 @@ class GameRepository(private val context: Context) {
      * Debug function: Add coins without affecting total earned (for development)
      */
     suspend fun debugAddCoins(amount: Long) {
-        context.dataStore.edit { preferences ->
+        dataStore.edit { preferences ->
             val currentCoins = preferences[COINS_KEY] ?: 0L
             preferences[COINS_KEY] = currentCoins + amount
         }
@@ -65,7 +73,7 @@ class GameRepository(private val context: Context) {
      * Debug function: Reset all game data
      */
     suspend fun debugResetGame() {
-        context.dataStore.edit { preferences ->
+        dataStore.edit { preferences ->
             preferences.clear()
         }
     }
@@ -74,7 +82,7 @@ class GameRepository(private val context: Context) {
      * Debug function: Set coins to specific amount
      */
     suspend fun debugSetCoins(amount: Long) {
-        context.dataStore.edit { preferences ->
+        dataStore.edit { preferences ->
             preferences[COINS_KEY] = amount
         }
     }
@@ -83,7 +91,7 @@ class GameRepository(private val context: Context) {
      * Spend coins (subtract from total)
      */
     suspend fun spendCoins(amount: Long) {
-        context.dataStore.edit { preferences ->
+        dataStore.edit { preferences ->
             val currentCoins = preferences[COINS_KEY] ?: 0L
             preferences[COINS_KEY] = maxOf(0L, currentCoins - amount)
         }
