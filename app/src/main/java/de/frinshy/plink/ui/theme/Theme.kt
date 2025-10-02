@@ -22,41 +22,41 @@ private val PlinkLightColorScheme = lightColorScheme(
     onPrimary = onPrimaryLight,
     primaryContainer = primaryContainerLight,
     onPrimaryContainer = onPrimaryContainerLight,
-    
+
     secondary = secondaryLight,
     onSecondary = onSecondaryLight,
     secondaryContainer = secondaryContainerLight,
     onSecondaryContainer = onSecondaryContainerLight,
-    
+
     tertiary = tertiaryLight,
     onTertiary = onTertiaryLight,
     tertiaryContainer = tertiaryContainerLight,
     onTertiaryContainer = onTertiaryContainerLight,
-    
+
     error = errorLight,
     onError = onErrorLight,
     errorContainer = errorContainerLight,
     onErrorContainer = onErrorContainerLight,
-    
+
     background = backgroundLight,
     onBackground = onSurfaceLight,
-    
+
     surface = surfaceLight,
     onSurface = onSurfaceLight,
     surfaceVariant = surfaceContainerLight,
     onSurfaceVariant = onSurfaceVariantLight,
-    
+
     surfaceContainer = surfaceContainerLight,
     surfaceContainerHigh = surfaceContainerHighLight,
     surfaceContainerHighest = surfaceContainerHighestLight,
-    
+
     outline = outlineLight,
     outlineVariant = outlineVariantLight,
-    
+
     inverseSurface = inverseSurfaceLight,
     inverseOnSurface = inverseOnSurfaceLight,
     inversePrimary = inversePrimaryLight,
-    
+
     surfaceTint = primaryLight,
     scrim = onSurfaceLight.copy(alpha = 0.8f)
 )
@@ -67,41 +67,41 @@ private val PlinkDarkColorScheme = darkColorScheme(
     onPrimary = onPrimaryDark,
     primaryContainer = primaryContainerDark,
     onPrimaryContainer = onPrimaryContainerDark,
-    
+
     secondary = secondaryDark,
     onSecondary = onSecondaryDark,
     secondaryContainer = secondaryContainerDark,
     onSecondaryContainer = onSecondaryContainerDark,
-    
+
     tertiary = tertiaryDark,
     onTertiary = onTertiaryDark,
     tertiaryContainer = tertiaryContainerDark,
     onTertiaryContainer = onTertiaryContainerDark,
-    
+
     error = errorDark,
     onError = onErrorDark,
     errorContainer = errorContainerDark,
     onErrorContainer = onErrorContainerDark,
-    
+
     background = backgroundDark,
     onBackground = onSurfaceDark,
-    
+
     surface = surfaceDark,
     onSurface = onSurfaceDark,
     surfaceVariant = surfaceContainerDark,
     onSurfaceVariant = onSurfaceVariantDark,
-    
+
     surfaceContainer = surfaceContainerDark,
     surfaceContainerHigh = surfaceContainerHighDark,
     surfaceContainerHighest = surfaceContainerHighestDark,
-    
+
     outline = outlineDark,
     outlineVariant = outlineVariantDark,
-    
+
     inverseSurface = inverseSurfaceDark,
     inverseOnSurface = inverseOnSurfaceDark,
     inversePrimary = inversePrimaryDark,
-    
+
     surfaceTint = primaryDark,
     scrim = onSurfaceDark.copy(alpha = 0.8f)
 )
@@ -118,6 +118,7 @@ fun PlinkTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
+
         darkTheme -> PlinkDarkColorScheme
         else -> PlinkLightColorScheme
     }
@@ -128,7 +129,7 @@ fun PlinkTheme(
             val window = (view.context as Activity).window
             // Enable edge-to-edge experience
             WindowCompat.setDecorFitsSystemWindows(window, false)
-            
+
             // Set proper status bar appearance
             WindowCompat.getInsetsController(window, view).apply {
                 isAppearanceLightStatusBars = !darkTheme

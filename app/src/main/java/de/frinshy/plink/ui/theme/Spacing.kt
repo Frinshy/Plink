@@ -15,7 +15,7 @@ object Spacing {
     val extraLarge = 32.dp
     val huge = 48.dp
     val massive = 64.dp
-    
+
     // Component-specific spacing
     val componentPadding = medium
     val cardPadding = large

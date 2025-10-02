@@ -33,7 +33,7 @@ val PlinkTypography = Typography(
         lineHeight = 44.sp,
         letterSpacing = 0.sp
     ),
-    
+
     // Headlines
     headlineLarge = TextStyle(
         fontFamily = FontFamily.Default,
@@ -56,7 +56,7 @@ val PlinkTypography = Typography(
         lineHeight = 32.sp,
         letterSpacing = 0.sp
     ),
-    
+
     // Titles
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
@@ -79,7 +79,7 @@ val PlinkTypography = Typography(
         lineHeight = 20.sp,
         letterSpacing = 0.1.sp
     ),
-    
+
     // Body text
     bodyLarge = TextStyle(
         fontFamily = FontFamily.Default,
@@ -102,7 +102,7 @@ val PlinkTypography = Typography(
         lineHeight = 16.sp,
         letterSpacing = 0.4.sp
     ),
-    
+
     // Labels
     labelLarge = TextStyle(
         fontFamily = FontFamily.Default,

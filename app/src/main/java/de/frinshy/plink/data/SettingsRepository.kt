@@ -24,6 +24,7 @@ class SettingsRepository(private val context: Context) {
 
     companion object {
         private val DARK_MODE_KEY = booleanPreferencesKey("dark_mode_enabled")
+
         // New key to store ThemeMode as int (ordinal of ThemeMode)
         private val THEME_MODE_KEY = intPreferencesKey("theme_mode")
     }
@@ -43,6 +44,7 @@ class SettingsRepository(private val context: Context) {
                 val dark = prefs[DARK_MODE_KEY] ?: false
                 if (dark) ThemeMode.DARK else ThemeMode.LIGHT
             }
+
             else -> ThemeMode.SYSTEM
         }
     }
@@ -74,9 +76,11 @@ class SettingsRepository(private val context: Context) {
                 prefs.contains(THEME_MODE_KEY) -> {
                     ThemeMode.values().getOrElse(prefs[THEME_MODE_KEY] ?: 0) { ThemeMode.SYSTEM }
                 }
+
                 prefs.contains(DARK_MODE_KEY) -> {
                     if (prefs[DARK_MODE_KEY] == true) ThemeMode.DARK else ThemeMode.LIGHT
                 }
+
                 else -> ThemeMode.SYSTEM
             }
             val next = when (current) {

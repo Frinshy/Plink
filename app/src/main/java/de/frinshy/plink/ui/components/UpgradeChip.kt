@@ -27,7 +27,7 @@ fun UpgradeChip(
 ) {
     AssistChip(
         onClick = { onClick?.invoke() },
-        label = { 
+        label = {
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelMedium
@@ -51,13 +51,13 @@ fun UpgradeChip(
         } else null,
         modifier = modifier,
         colors = AssistChipDefaults.assistChipColors(
-            containerColor = if (level > 0) 
-                MaterialTheme.colorScheme.primary.copy(alpha = 0.12f) 
-            else 
+            containerColor = if (level > 0)
+                MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+            else
                 MaterialTheme.colorScheme.surface,
-            labelColor = if (level > 0) 
-                MaterialTheme.colorScheme.primary 
-            else 
+            labelColor = if (level > 0)
+                MaterialTheme.colorScheme.primary
+            else
                 MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
         )
     )
