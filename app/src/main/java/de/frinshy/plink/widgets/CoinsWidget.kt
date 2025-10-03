@@ -9,6 +9,8 @@ import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.LocalSize
+import androidx.glance.action.actionStartActivity
+import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.provideContent
@@ -22,6 +24,7 @@ import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
+import de.frinshy.plink.MainActivity
 import de.frinshy.plink.data.GameRepository
 import de.frinshy.plink.utils.NumberFormatter
 
@@ -33,16 +36,18 @@ class CoinsWidget : GlanceAppWidget() {
         // Read the latest game state from repository (DataStore) and pass coins into the Glance UI
         val repo = GameRepository(context)
 
+        val clickModifier = GlanceModifier.clickable(actionStartActivity<MainActivity>())
+
         provideContent {
             GlanceTheme {
                 // create your AppWidget here and provide the formatted coins
-                MyContent(repo)
+                MyContent(repo, clickModifier)
             }
         }
     }
 
     @Composable
-    private fun MyContent(repo: GameRepository) {
+    private fun MyContent(repo: GameRepository, clickModifier: GlanceModifier) {
         val currentState = repo.gameState
             .collectAsState(initial = null)
             .value
@@ -65,7 +70,8 @@ class CoinsWidget : GlanceAppWidget() {
                     modifier = GlanceModifier
                         .fillMaxSize()
                         .background(GlanceTheme.colors.background)
-                        .padding(6.dp),
+                        .padding(6.dp)
+                        .then(clickModifier),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -91,7 +97,8 @@ class CoinsWidget : GlanceAppWidget() {
                     modifier = GlanceModifier
                         .fillMaxSize()
                         .background(GlanceTheme.colors.background)
-                        .padding(10.dp),
+                        .padding(10.dp)
+                        .then(clickModifier),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {

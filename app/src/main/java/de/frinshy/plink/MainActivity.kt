@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import de.frinshy.plink.data.SettingsRepository
@@ -43,6 +44,8 @@ import de.frinshy.plink.navigation.PlinkNavigation
 import de.frinshy.plink.navigation.PlinkRoutes
 import de.frinshy.plink.ui.theme.PlinkTheme
 import de.frinshy.plink.viewmodel.GameViewModel
+import de.frinshy.plink.widgets.WidgetUpdater
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
@@ -182,6 +185,15 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // When returning to the app, refresh widgets so they reflect any
+        // changes that may have occurred while the app was backgrounded.
+        lifecycleScope.launch {
+            WidgetUpdater.updateAllCoins(applicationContext)
         }
     }
 }

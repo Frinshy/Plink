@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import de.frinshy.plink.widgets.WidgetUpdater
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -57,6 +58,10 @@ class GameRepository(private val context: Context) {
             preferences[COINS_KEY] = currentCoins + amount
             preferences[TOTAL_COINS_EARNED_KEY] = currentTotal + amount
         }
+        // Ensure widgets display latest values. Fire-and-forget caller may
+        // choose to launch this in their coroutine scope; here we call the
+        // helper so callers don't need Glance imports.
+        WidgetUpdater.updateAllCoins(context)
     }
 
     /**
@@ -67,6 +72,7 @@ class GameRepository(private val context: Context) {
             val currentCoins = preferences[COINS_KEY] ?: 0L
             preferences[COINS_KEY] = currentCoins + amount
         }
+        WidgetUpdater.updateAllCoins(context)
     }
 
     /**
@@ -76,6 +82,7 @@ class GameRepository(private val context: Context) {
         dataStore.edit { preferences ->
             preferences.clear()
         }
+        WidgetUpdater.updateAllCoins(context)
     }
 
     /**
@@ -85,6 +92,7 @@ class GameRepository(private val context: Context) {
         dataStore.edit { preferences ->
             preferences[COINS_KEY] = amount
         }
+        WidgetUpdater.updateAllCoins(context)
     }
 
     /**
@@ -95,6 +103,7 @@ class GameRepository(private val context: Context) {
             val currentCoins = preferences[COINS_KEY] ?: 0L
             preferences[COINS_KEY] = maxOf(0L, currentCoins - amount)
         }
+        WidgetUpdater.updateAllCoins(context)
     }
 
     /**
@@ -104,6 +113,7 @@ class GameRepository(private val context: Context) {
         context.dataStore.edit { preferences ->
             preferences[COINS_PER_TAP_KEY] = newValue
         }
+        WidgetUpdater.updateAllCoins(context)
     }
 
     /**
@@ -112,6 +122,7 @@ class GameRepository(private val context: Context) {
     suspend fun updateAutoCollectors(newValue: Int) {
         // Persist auto-collector level using generic upgrade key
         updateUpgradeLevel("auto_collector", newValue)
+        WidgetUpdater.updateAllCoins(context)
     }
 
     /**
@@ -122,6 +133,7 @@ class GameRepository(private val context: Context) {
         context.dataStore.edit { preferences ->
             preferences[key] = newValue
         }
+        WidgetUpdater.updateAllCoins(context)
     }
 
     /**
