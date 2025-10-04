@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.TrendingUp
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material.icons.outlined.TrendingUp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -94,23 +94,6 @@ fun SectionHeader(
     }
 }
 
-/**
- * A simple page title with larger typography for main screen headers.
- */
-@Composable
-fun PageTitle(
-    title: String,
-    modifier: Modifier = Modifier
-) {
-    Text(
-        text = title,
-        style = MaterialTheme.typography.headlineMedium,
-        fontWeight = FontWeight.Bold,
-        color = MaterialTheme.colorScheme.onSurface,
-        modifier = modifier
-    )
-}
-
 @Preview(showBackground = true)
 @Composable
 fun GameTopAppBarPreview() {
@@ -143,7 +126,7 @@ fun SectionHeaderPreview() {
     PlinkTheme {
         SectionHeader(
             title = "Upgrades",
-            icon = Icons.Outlined.TrendingUp
+            icon = Icons.AutoMirrored.Outlined.TrendingUp
         )
     }
 }

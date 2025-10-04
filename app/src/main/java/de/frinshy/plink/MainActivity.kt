@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -105,6 +106,16 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                                 label = { Text("Shop") }
+                            )
+                            NavigationBarItem(
+                                selected = currentRoute == PlinkRoutes.GAMBLE,
+                                onClick = {
+                                    navController.navigate(PlinkRoutes.GAMBLE) {
+                                        launchSingleTop = true
+                                    }
+                                },
+                                icon = { Icon(Icons.Default.Star, contentDescription = null) },
+                                label = { Text("Gamble") }
                             )
                             NavigationBarItem(
                                 selected = currentRoute == PlinkRoutes.SETTINGS,

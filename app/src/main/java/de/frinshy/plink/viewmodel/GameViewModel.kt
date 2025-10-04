@@ -4,6 +4,9 @@ package de.frinshy.plink.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.viewModelScope
 import de.frinshy.plink.data.GameRepository
 import de.frinshy.plink.data.GameState
@@ -27,7 +30,50 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     private var autoCollectorJob: Job? = null
 
+    // Track whether the app is in the foreground (started) so auto-collector only
+    // runs while the app is visible to the user.
+    private var isAppInForeground: Boolean = false
+
+    // Track whether the main screen is currently visible to the user
+    private var isMainScreenVisible: Boolean = false
+
+    // Lifecycle observer to start/stop auto collector when app moves foreground/background
+    private val lifecycleObserver = LifecycleEventObserver { _, event ->
+        when (event) {
+            Lifecycle.Event.ON_START -> {
+                isAppInForeground = true
+                // If we have collectors, start the loop when app comes to foreground
+                val collectors = _uiState.value.gameState.upgradeLevels["auto_collector"] ?: 0
+                if (collectors > 0) startAutoCollector()
+            }
+
+            Lifecycle.Event.ON_STOP -> {
+                isAppInForeground = false
+                // Pause auto-collector when app goes to background
+                stopAutoCollector()
+            }
+
+            else -> {}
+        }
+    }
+
+    /** Called by UI when the main screen becomes visible/invisible. */
+    fun setMainScreenVisible(visible: Boolean) {
+        isMainScreenVisible = visible
+        if (visible) {
+            // If app is foreground and collectors exist, start collecting
+            val collectors = _uiState.value.gameState.upgradeLevels["auto_collector"] ?: 0
+            if (isAppInForeground && collectors > 0) startAutoCollector()
+        } else {
+            // Stop when leaving main screen
+            stopAutoCollector()
+        }
+    }
+
     init {
+        // Observe process lifecycle so we only auto-collect while app is foreground
+        ProcessLifecycleOwner.get().lifecycle.addObserver(lifecycleObserver)
+
         // Observe persisted game state and update UI state
         viewModelScope.launch {
             repository.gameState.collectLatest { gameState ->
@@ -36,8 +82,10 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
                     isLoading = false
                 )
                 // Start or stop the auto-collector loop based on stored collector count
-                if ((gameState.upgradeLevels["auto_collector"] ?: 0) > 0) {
-                    startAutoCollector()
+                val collectors = (gameState.upgradeLevels["auto_collector"] ?: 0)
+                if (collectors > 0) {
+                    // Only start if app is in foreground
+                    if (isAppInForeground) startAutoCollector()
                 } else {
                     stopAutoCollector()
                 }
@@ -91,6 +139,9 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     /** Start the auto-collector loop which grants coins every second. */
     private fun startAutoCollector() {
+        // Guard: don't start if app isn't in foreground
+        if (!isAppInForeground) return
+
         stopAutoCollector()
 
         autoCollectorJob = viewModelScope.launch {
@@ -166,6 +217,19 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /**
+     * Gamble a wager. Executes repository.gamble and invokes an optional callback
+     * with the outcome and the updated coin balance.
+     */
+    fun gamble(wager: Long, onResult: ((won: Boolean, newBalance: Long) -> Unit)? = null) {
+        viewModelScope.launch {
+            val won = repository.gamble(wager)
+            // Read latest state to report new balance
+            val currentState = _uiState.value.gameState
+            onResult?.invoke(won, currentState.coins)
+        }
+    }
+
+    /**
      * Toggle debug mode visibility
      */
     fun toggleDebugMode() {
@@ -177,6 +241,8 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     override fun onCleared() {
         super.onCleared()
         stopAutoCollector()
+        // Remove lifecycle observer when ViewModel is cleared
+        ProcessLifecycleOwner.get().lifecycle.removeObserver(lifecycleObserver)
     }
 }
 

@@ -107,6 +107,41 @@ class GameRepository(private val context: Context) {
     }
 
     /**
+     * Gamble a wagered amount. Returns true if the player won (winnings added),
+     * false if lost (wager subtracted). This function validates the wager and
+     * persists the resulting coin change. A simple 50/50 random outcome is used.
+     */
+    suspend fun gamble(wager: Long): Boolean {
+        if (wager <= 0L) return false
+
+        // Read current coins and fail early if insufficient funds
+        var result = false
+        dataStore.edit { preferences ->
+            val currentCoins = preferences[COINS_KEY] ?: 0L
+            if (wager > currentCoins) {
+                // Not enough coins: no change
+                return@edit
+            }
+
+            // 50/50 chance
+            val won = (kotlin.random.Random.nextBoolean())
+            if (won) {
+                // On win, award double the wager (net gain = +wager)
+                preferences[COINS_KEY] = currentCoins + wager
+                val currentTotal = preferences[TOTAL_COINS_EARNED_KEY] ?: 0L
+                preferences[TOTAL_COINS_EARNED_KEY] = currentTotal + wager
+            } else {
+                // On loss, subtract the wager (net change = -wager)
+                preferences[COINS_KEY] = maxOf(0L, currentCoins - wager)
+            }
+            result = won
+        }
+        // Update widgets after gambling
+        WidgetUpdater.updateAllCoins(context)
+        return result
+    }
+
+    /**
      * Update coins per tap
      */
     suspend fun updateCoinsPerTap(newValue: Int) {

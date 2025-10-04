@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.TrendingUp
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -20,6 +21,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -29,8 +31,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,6 +45,7 @@ import de.frinshy.plink.ui.components.SectionHeader
 import de.frinshy.plink.ui.components.StatChip
 import de.frinshy.plink.ui.components.UpgradeChip
 import de.frinshy.plink.ui.theme.CoinDisplayTypography
+import de.frinshy.plink.ui.theme.GameTitleTypography
 import de.frinshy.plink.ui.theme.PlinkTheme
 import de.frinshy.plink.ui.theme.Spacing
 import de.frinshy.plink.ui.theme.coinGold
@@ -61,7 +62,16 @@ fun MainScreen(
 ) {
     val uiState: GameUiState by gameViewModel.uiState.collectAsState()
     val gameState = uiState.gameState
-    val haptic = LocalHapticFeedback.current
+
+    // Notify ViewModel that the main screen is visible while this composable is
+    // in composition. This ensures auto-collector runs only when the main game
+    // screen is actually shown.
+    DisposableEffect(Unit) {
+        gameViewModel.setMainScreenVisible(true)
+        onDispose {
+            gameViewModel.setMainScreenVisible(false)
+        }
+    }
 
     // Animatable scale for tap-press animation
     val coinButtonScale = remember { androidx.compose.animation.core.Animatable(1f) }
@@ -85,12 +95,23 @@ fun MainScreen(
         }
     }
 
+    // Locking the app to portrait allows us to use weight/fill to make the coin
+    // area fill the available screen space reliably.
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(Spacing.screenPadding),
         verticalArrangement = Arrangement.spacedBy(Spacing.sectionSpacing)
     ) {
+        // App title
+        Text(
+            text = "Plink",
+            style = GameTitleTypography,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center
+        )
+
         // Coin display
         PrimaryGameCard {
             Column(
@@ -135,6 +156,8 @@ fun MainScreen(
         }
 
         // Main coin button
+        // Main coin area: fill the remaining screen space so the coin is large
+        // and centered on portrait phones.
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -144,11 +167,12 @@ fun MainScreen(
             CircularGameButton(
                 onClick = {
                     gameViewModel.onCoinTap()
-                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                 },
-                modifier = Modifier.scale(coinButtonScale.value)
+                modifier = Modifier
+                    .sizeIn(maxWidth = 240.dp, maxHeight = 240.dp)
+                    .scale(coinButtonScale.value)
             ) {
-                // Canvas-drawn coin graphic
+                // Canvas-drawn coin graphic (fixed inside the button)
                 CoinGraphic(size = 200.dp)
             }
         }

@@ -5,7 +5,7 @@ package de.frinshy.plink.ui.components
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import de.frinshy.plink.ui.theme.coinGold
 import de.frinshy.plink.ui.theme.coinGoldDark
 import de.frinshy.plink.ui.theme.coinShine
+import kotlin.math.min
 
 /** Draws a stylized coin using Canvas. Sizes itself to [size]. */
 @Composable
@@ -28,10 +29,23 @@ fun CoinGraphic(
     faceColor: Color = coinGold,
     shineColor: Color = coinShine,
 ) {
-    Box(modifier = modifier.size(size), contentAlignment = Alignment.Center) {
+    Box(
+        modifier = modifier.sizeIn(maxWidth = size, maxHeight = size),
+        contentAlignment = Alignment.Center
+    ) {
         Canvas(modifier = Modifier.fillMaxSize()) {
-            val diameter = size.toPx()
+            // Use the actual canvas size to compute drawing dimensions so the graphic
+            // always fits inside its available space (avoids clipping when parent
+            // applies padding or different constraints).
+            val canvasSize = this.size
+            val diameter = min(canvasSize.width, canvasSize.height)
             val radius = diameter / 2f
+
+            // Center of the canvas
+            val center = Offset(canvasSize.width / 2f, canvasSize.height / 2f)
+
+            // Slightly inset face
+            val faceRadius = radius * 0.9f
 
             // Rim
             drawCircle(
@@ -39,11 +53,7 @@ fun CoinGraphic(
                 radius = radius,
             )
 
-            // Slightly inset face
-            val faceRadius = radius * 0.9f
-
             // Radial gradient for coin face
-            val center = Offset(radius, radius)
             drawCircle(
                 brush = Brush.radialGradient(
                     colors = listOf(faceColor, faceColor.copy(alpha = 0.85f), rimColor),
@@ -55,18 +65,18 @@ fun CoinGraphic(
                 center = center
             )
 
-            // Highlight (upper-left)
+            // Highlight (upper-left) relative to center
             drawCircle(
                 color = shineColor.copy(alpha = 0.9f),
                 radius = faceRadius * 0.35f,
-                center = Offset(radius * 0.6f, radius * 0.5f)
+                center = center + Offset(-radius * 0.4f, -radius * 0.5f)
             )
 
-            // Subtle inner shadow (lower-right)
+            // Subtle inner shadow (lower-right) slightly offset from center
             drawCircle(
                 color = rimColor.copy(alpha = 0.12f),
                 radius = faceRadius * 0.95f,
-                center = Offset(radius * 1.05f, radius * 1.05f)
+                center = center + Offset(radius * 0.05f, radius * 0.05f)
             )
         }
     }

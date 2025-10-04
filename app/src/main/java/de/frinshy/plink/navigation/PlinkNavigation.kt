@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import de.frinshy.plink.data.SettingsRepository
 import de.frinshy.plink.ui.screens.DebugScreen
+import de.frinshy.plink.ui.screens.GambleScreen
 import de.frinshy.plink.ui.screens.MainScreen
 import de.frinshy.plink.ui.screens.SettingsScreen
 import de.frinshy.plink.ui.screens.ShopScreen
@@ -28,6 +29,7 @@ object PlinkRoutes {
     const val SHOP = "shop"
     const val DEBUG = "debug"
     const val SETTINGS = "settings"
+    const val GAMBLE = "gamble"
 }
 
 /**
@@ -59,6 +61,7 @@ private val bottomNavRoutes = setOf(
     PlinkRoutes.MAIN,
     PlinkRoutes.SHOP,
     PlinkRoutes.DEBUG,
+    PlinkRoutes.GAMBLE,
     PlinkRoutes.SETTINGS
 )
 
@@ -110,6 +113,25 @@ fun PlinkNavigation(
         }
 
         composable(
+            route = PlinkRoutes.GAMBLE,
+            enterTransition = {
+                when (initialState.destination.route) {
+                    in bottomNavRoutes -> if (targetState.destination.route in bottomNavRoutes) bottomEnter else slideInFromRight
+                    else -> slideInFromRight
+                }
+            },
+            exitTransition = {
+                when (targetState.destination.route) {
+                    in bottomNavRoutes -> if (initialState.destination.route in bottomNavRoutes) bottomExit else slideOutToRight
+                    else -> slideOutToRight
+                }
+            },
+            popEnterTransition = { slideInFromLeft },
+            popExitTransition = { slideOutToRight }) {
+            GambleScreen(gameViewModel = gameViewModel)
+        }
+
+        composable(
             route = PlinkRoutes.SHOP,
             enterTransition = {
                 when (initialState.destination.route) {
@@ -152,9 +174,6 @@ fun PlinkNavigation(
             popExitTransition = { slideOutToRight }
         ) {
             DebugScreen(
-                onNavigateBack = {
-                    navController.popBackStack()
-                },
                 gameViewModel = gameViewModel
             )
         }

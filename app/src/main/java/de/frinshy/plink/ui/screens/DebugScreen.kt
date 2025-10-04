@@ -57,7 +57,6 @@ import de.frinshy.plink.viewmodel.GameViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DebugScreen(
-    onNavigateBack: () -> Unit,
     gameViewModel: GameViewModel = viewModel()
 ) {
     val uiState by gameViewModel.uiState.collectAsState()
@@ -386,8 +385,8 @@ private fun QuickActionsCard(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.elevatedCardColors(
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-            contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
         )
     ) {
         Column(
@@ -401,7 +400,7 @@ private fun QuickActionsCard(
                 Icon(
                     imageVector = Icons.Default.PlayArrow,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onTertiaryContainer
+                    tint = MaterialTheme.colorScheme.onSecondaryContainer
                 )
                 Text(
                     text = "Quick Actions",
@@ -474,7 +473,7 @@ private fun QuickActionsCard(
                         imageVector = Icons.Default.Star,
                         contentDescription = null,
                         modifier = Modifier.size(18.dp),
-                        tint = MaterialTheme.colorScheme.onTertiaryContainer
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text("Max All Upgrades")
@@ -531,7 +530,6 @@ private fun DebugInfoRow(
 fun DebugScreenPreview() {
     PlinkTheme {
         DebugScreen(
-            onNavigateBack = {}
         )
     }
 }

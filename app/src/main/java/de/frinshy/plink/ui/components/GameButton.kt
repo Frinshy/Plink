@@ -3,6 +3,7 @@ package de.frinshy.plink.ui.components
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -141,15 +142,15 @@ fun CircularGameButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     size: Dp = 240.dp,
-    containerColor: Color = MaterialTheme.colorScheme.tertiaryContainer,
-    contentColor: Color = MaterialTheme.colorScheme.onTertiaryContainer,
-    elevation: Dp = Elevation.button,
+    containerColor: Color = Color.Transparent,
+    contentColor: Color = Color.Transparent,
     shape: Shape = CircleShape,
     content: @Composable () -> Unit
 ) {
     FilledTonalButton(
         onClick = onClick,
-        modifier = modifier.size(size),
+        modifier = modifier
+            .sizeIn(maxWidth = size, maxHeight = size),
         shape = shape,
         colors = ButtonDefaults.filledTonalButtonColors(
             containerColor = containerColor,
