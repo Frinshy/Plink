@@ -4,22 +4,28 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Option 1: Modern P with chain link symbol -->
+    <!-- Modern "P" logo for Plink - Golden Material Design style -->
+    <!-- Safe zone boundaries: 21,21 to 87,87 -->
 
-    <!-- Rounded square background for modern look -->
+    <!-- Background circle for the P - Golden theme -->
     <path
-        android:fillColor="#4CAF50"
-        android:pathData="M54,20 C70,20 84,34 84,50 L84,58 C84,74 70,88 54,88 C38,88 24,74 24,58 L24,50 C24,34 38,20 54,20 Z" />
+        android:fillColor="#FFB300"
+        android:pathData="M54,28 C66.15,28 76,37.85 76,50 L76,58 C76,70.15 66.15,80 54,80 C41.85,80 32,70.15 32,58 L32,50 C32,37.85 41.85,28 54,28 Z" />
 
-    <!-- Bold modern "P" -->
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M40,36 L40,72 L46,72 L46,58 L60,58 C65,58 69,54 69,49 L69,45 C69,40 65,36 60,36 L40,36 Z M46,42 L60,42 C62,42 63,43 63,45 L63,49 C63,51 62,52 60,52 L46,52 L46,42 Z" />
-
-    <!-- Chain link accent -->
+    <!-- Main "P" letter - bold and modern -->
     <path
         android:fillColor="#FFFFFF"
-        android:fillAlpha="0.7"
-        android:pathData="M66,50 C68,50 70,52 70,54 C70,56 68,58 66,58 L62,58 C60,58 58,56 58,54 C58,52 60,50 62,50 L66,50 Z M66,46 C64,46 62,48 62,50 L66,50 C68,50 70,48 70,46 C70,44 68,42 66,42 C64,42 62,44 62,46 L66,46 Z" />
+        android:pathData="M42,38 L42,70 L48,70 L48,58 L60,58 C64.42,58 68,54.42 68,50 L68,46 C68,41.58 64.42,38 60,38 L42,38 Z M48,44 L60,44 C61.1,44 62,44.9 62,46 L62,50 C62,51.1 61.1,52 60,52 L48,52 L48,44 Z" />
+
+    <!-- Stylistic accent - small golden dot -->
+    <path
+        android:fillColor="#FFD54F"
+        android:pathData="M66,62 C67.66,62 69,63.34 69,65 C69,66.66 67.66,68 66,68 C64.34,68 63,66.66 63,65 C63,63.34 64.34,62 66,62 Z" />
+
+    <!-- Golden highlight for premium feel -->
+    <path
+        android:fillColor="#FFF8E1"
+        android:fillAlpha="0.4"
+        android:pathData="M54,28 C60,28 65,30 69,34 C65,30 60,28 54,28 C48,28 43,30 39,34 C43,30 48,28 54,28 Z" />
 
 </vector>

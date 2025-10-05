@@ -5,16 +5,17 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Monochrome icon - "P" with chain link for themed icons -->
+    <!-- Monochrome "P" logo for themed icons -->
+    <!-- Safe zone boundaries: 21,21 to 87,87 (66dp diameter circle) -->
 
-    <!-- Bold modern "P" -->
+    <!-- Main "P" letter - bold and clean for monochrome -->
     <path
         android:fillColor="#000000"
-        android:pathData="M40,36 L40,72 L46,72 L46,58 L60,58 C65,58 69,54 69,49 L69,45 C69,40 65,36 60,36 L40,36 Z M46,42 L60,42 C62,42 63,43 63,45 L63,49 C63,51 62,52 60,52 L46,52 L46,42 Z" />
+        android:pathData="M42,35 L42,73 L50,73 L50,60 L62,60 C67.52,60 72,55.52 72,50 L72,45 C72,39.48 67.52,35 62,35 L42,35 Z M50,43 L62,43 C63.1,43 64,43.9 64,45 L64,50 C64,51.1 63.1,52 62,52 L50,52 L50,43 Z" />
 
-    <!-- Chain link accent -->
+    <!-- Small accent dot for style -->
     <path
         android:fillColor="#000000"
-        android:pathData="M66,50 C68,50 70,52 70,54 C70,56 68,58 66,58 L62,58 C60,58 58,56 58,54 C58,52 60,50 62,50 L66,50 Z M66,46 C64,46 62,48 62,50 L66,50 C68,50 70,48 70,46 C70,44 68,42 66,42 C64,42 62,44 62,46 L66,46 Z" />
+        android:pathData="M68,63 C69.66,63 71,64.34 71,66 C71,67.66 69.66,69 68,69 C66.34,69 65,67.66 65,66 C65,64.34 66.34,63 68,63 Z" />
 
 </vector>
