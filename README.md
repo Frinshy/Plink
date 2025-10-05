@@ -1,36 +1,96 @@
-# Plink
+# 🎮 Plink
 
-Plink is a small Android clicker/clicker-style game built with Kotlin and Jetpack Compose (
-Material3).
+Plink is a modern Android incremental clicker game built with **Kotlin** and **Jetpack Compose**
+using **Material 3** design. Tap your way to fortune, purchase upgrades, and watch your coin empire
+grow!
 
-## About
+![Platform](https://img.shields.io/badge/Platform-Android-brightgreen.svg)
+![Language](https://img.shields.io/badge/Language-Kotlin-blue.svg)
+![UI](https://img.shields.io/badge/UI-Jetpack%20Compose-orange.svg)
+![Design](https://img.shields.io/badge/Design-Material%203-purple.svg)
+![Min SDK](https://img.shields.io/badge/Min%20SDK-24-red.svg)
 
-A simple incremental/clicker game that lets players collect coins, upgrade abilities, and progress
-through a casual economy. The app uses Jetpack Compose for UI, DataStore for settings persistence,
-and a modern Material 3 theme.
+## ✨ Features
 
-## Screenshots
+### 🪙 Core Gameplay
 
-<img width="320" height="714" alt="image" src="https://github.com/user-attachments/assets/997b5036-d6d9-44b7-91bc-3a99ae0be6c1" />
-<img width="320" height="714" alt="image" src="https://github.com/user-attachments/assets/8c616d33-3794-4d28-aa70-03604a55255d" />
-<img width="320" height="714" alt="image" src="https://github.com/user-attachments/assets/fdeaad50-c61d-423f-90d7-cf08fb98b6ce" />
+- **Tap to Earn**: Tap the main button to earn coins
+- **Automatic Collection**: Purchase auto-collectors that generate coins over time
+- **Progressive Upgrades**: Improve your earning potential with various upgrades
+- **Persistent Progress**: Your progress is automatically saved
 
-## Build & Run
+### 🛒 Shop System
 
-Requirements:
+- **Better Finger**: Increases coins earned per tap (max level 50)
+- **Auto Collector**: Generates 1 coin per second automatically (max level 25)
+- **Dynamic Pricing**: Upgrade costs increase with each purchase level
 
-- Java 11 (or the version defined by your Android Gradle Plugin)
-- Android SDK and platform(s) required by the project
-- Gradle (the project includes the Gradle wrapper)
+### 🎰 Gambling Mini-Game
 
-From the project root (Windows PowerShell):
+- **Risk & Reward**: Bet your coins for a chance to multiply them
+- **Customizable Bets**: Set your own bet amount
+- **Animated Results**: Engaging visual feedback for wins and losses
 
-```
-# Build debug APK
-.\gradlew.bat assembleDebug
+### 🎨 Customization & Settings
 
-# Install on a connected device or emulator
-.\gradlew.bat installDebug
-```
+- **Theme Options**:
+  - Light Mode
+  - Dark Mode
+  - System Default (follows device theme)
+- **Haptic Feedback**: Optional vibration on tap (requires vibrate permission)
+- **Persistent Settings**: All preferences saved using DataStore
 
-Or open the project in Android Studio and run the app normally.
+### 📱 Home Screen Widget
+
+- **Live Coin Display**: View your current coin balance directly from your home screen
+- **Quick Access**: Tap widget to launch the app
+- **Real-time Updates**: Widget updates automatically as you earn coins
+
+### 🛠️ Developer Tools
+
+- **Debug Screen**: Developer tools for testing and debugging (debug builds only)
+- **Game State Management**: View and modify game state for testing purposes
+
+## 📱 Screenshots
+
+<!-- Main Game Screen -->
+<div align="center">
+  <img src="[SCREENSHOT_PLACEHOLDER_MAIN_SCREEN]" alt="Main Game Screen" width="250"/>
+  <p><em>Main game screen with tap button and coin display</em></p>
+</div>
+
+<!-- Shop Screen -->
+<div align="center">
+  <img src="[SCREENSHOT_PLACEHOLDER_SHOP_SCREEN]" alt="Shop Screen" width="250"/>
+  <p><em>Shop screen showing available upgrades</em></p>
+</div>
+
+<!-- Gambling Screen -->
+<div align="center">
+  <img src="[SCREENSHOT_PLACEHOLDER_GAMBLE_SCREEN]" alt="Gambling Screen" width="250"/>
+  <p><em>Gambling mini-game interface</em></p>
+</div>
+
+<!-- Settings Screen -->
+<div align="center">
+  <img src="[SCREENSHOT_PLACEHOLDER_SETTINGS_SCREEN]" alt="Settings Screen" width="250"/>
+  <p><em>Settings and customization options</em></p>
+</div>
+
+<!-- Home Screen Widget -->
+<div align="center">
+  <img src="[SCREENSHOT_PLACEHOLDER_WIDGET]" alt="Home Screen Widget" width="250"/>
+  <p><em>Home screen widget displaying coin balance</em></p>
+</div>
+
+<!-- Theme Comparison -->
+<div align="center">
+  <img src="[SCREENSHOT_PLACEHOLDER_LIGHT_THEME]" alt="Light Theme" width="200"/>
+  <img src="[SCREENSHOT_PLACEHOLDER_DARK_THEME]" alt="Dark Theme" width="200"/>
+  <p><em>Light and Dark theme options</em></p>
+</div>
+
+<div align="center">
+  <p>Made with ❤️ and Kotlin</p>
+  <p>Happy clicking! 🎯</p>
+</div>
