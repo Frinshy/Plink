@@ -7,6 +7,9 @@ import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
@@ -27,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
@@ -36,7 +40,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import de.frinshy.plink.ui.theme.Elevation
 import de.frinshy.plink.ui.theme.PlinkTheme
 
 /**
@@ -159,23 +162,17 @@ fun CircularGameButton(
     shape: Shape = CircleShape,
     content: @Composable () -> Unit
 ) {
-    FilledTonalButton(
-        onClick = onClick,
-        // Use sizeIn so the button uses up to `size` but can shrink if parent imposes
-        // tighter constraints (prevents the outer rim from being clipped).
-        modifier = modifier.sizeIn(maxWidth = size, maxHeight = size),
-        shape = shape,
-        colors = ButtonDefaults.filledTonalButtonColors(
-            containerColor = containerColor,
-            contentColor = contentColor
-        ),
-        elevation = ButtonDefaults.buttonElevation(
-            defaultElevation = Elevation.button,
-            pressedElevation = Elevation.button + 6.dp,
-            hoveredElevation = Elevation.button + 3.dp
-        ),
-        content = { content() }
-    )
+    Box(
+        modifier = modifier
+            .sizeIn(maxWidth = size, maxHeight = size)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null // This removes the ripple effect completely
+            ) { onClick() },
+        contentAlignment = Alignment.Center
+    ) {
+        content()
+    }
 }
 
 /**

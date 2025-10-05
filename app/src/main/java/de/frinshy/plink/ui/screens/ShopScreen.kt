@@ -20,7 +20,6 @@ import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,8 +38,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.frinshy.plink.data.Upgrade
+import de.frinshy.plink.ui.components.PrimaryGameCard
 import de.frinshy.plink.ui.theme.CoinDisplayTypography
 import de.frinshy.plink.ui.theme.PlinkTheme
+import de.frinshy.plink.ui.theme.Spacing
 import de.frinshy.plink.ui.theme.UpgradePriceTypography
 import de.frinshy.plink.ui.theme.coinGold
 import de.frinshy.plink.ui.theme.successGreen
@@ -59,15 +60,16 @@ fun ShopScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(horizontal = Spacing.screenPadding)
     ) {
-        // Coin balance
+        // Coin balance with consistent spacing
         CoinBalanceCard(coins = gameState.coins)
 
         // Upgrades list
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            contentPadding = PaddingValues(vertical = Spacing.small),
+            verticalArrangement = Arrangement.spacedBy(Spacing.medium)
         ) {
             items(Upgrade.allUpgrades) { upgrade ->
                 UpgradeCard(
@@ -80,7 +82,7 @@ fun ShopScreen(
 
             // Bottom padding for list
             item {
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(Spacing.medium))
             }
         }
     }
@@ -88,20 +90,11 @@ fun ShopScreen(
 
 @Composable
 private fun CoinBalanceCard(coins: Long) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
+    PrimaryGameCard {
         Row(
-            modifier = Modifier.padding(20.dp),
+            modifier = Modifier.padding(Spacing.cardPadding),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalArrangement = Arrangement.spacedBy(Spacing.medium)
         ) {
             Surface(
                 shape = MaterialTheme.shapes.small,
@@ -109,7 +102,7 @@ private fun CoinBalanceCard(coins: Long) {
             ) {
                 Text(
                     text = "💰",
-                    modifier = Modifier.padding(12.dp),
+                    modifier = Modifier.padding(Spacing.medium),
                     style = MaterialTheme.typography.headlineSmall
                 )
             }

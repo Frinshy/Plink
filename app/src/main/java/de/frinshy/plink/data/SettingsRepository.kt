@@ -23,10 +23,11 @@ private val Context.settingsDataStore: DataStore<Preferences> by preferencesData
 class SettingsRepository(private val context: Context) {
 
     companion object {
-        private val DARK_MODE_KEY = booleanPreferencesKey("dark_mode_enabled")
-
-        // New key to store ThemeMode as int (ordinal of ThemeMode)
+        // Key to store ThemeMode as int (ordinal of ThemeMode)
         private val THEME_MODE_KEY = intPreferencesKey("theme_mode")
+
+        // Key to store debug menu visibility state
+        private val DEBUG_MENU_ENABLED_KEY = booleanPreferencesKey("debug_menu_enabled")
     }
 
     /**
@@ -38,11 +39,6 @@ class SettingsRepository(private val context: Context) {
             prefs.contains(THEME_MODE_KEY) -> {
                 val ordinal = prefs[THEME_MODE_KEY] ?: ThemeMode.SYSTEM.ordinal
                 ThemeMode.values().getOrElse(ordinal) { ThemeMode.SYSTEM }
-            }
-            // Backwards compatibility: keep reading old boolean key if present
-            prefs.contains(DARK_MODE_KEY) -> {
-                val dark = prefs[DARK_MODE_KEY] ?: false
-                if (dark) ThemeMode.DARK else ThemeMode.LIGHT
             }
 
             else -> ThemeMode.SYSTEM
@@ -77,10 +73,6 @@ class SettingsRepository(private val context: Context) {
                     ThemeMode.values().getOrElse(prefs[THEME_MODE_KEY] ?: 0) { ThemeMode.SYSTEM }
                 }
 
-                prefs.contains(DARK_MODE_KEY) -> {
-                    if (prefs[DARK_MODE_KEY] == true) ThemeMode.DARK else ThemeMode.LIGHT
-                }
-
                 else -> ThemeMode.SYSTEM
             }
             val next = when (current) {
@@ -89,6 +81,33 @@ class SettingsRepository(private val context: Context) {
                 ThemeMode.SYSTEM -> ThemeMode.DARK
             }
             prefs[THEME_MODE_KEY] = next.ordinal
+        }
+    }
+
+    /**
+     * Flow that emits whether the debug menu is enabled.
+     * Default is false (debug menu hidden).
+     */
+    val isDebugMenuEnabled = context.settingsDataStore.data.map { prefs ->
+        prefs[DEBUG_MENU_ENABLED_KEY] ?: false
+    }
+
+    /**
+     * Toggle the debug menu visibility state.
+     */
+    suspend fun toggleDebugMenu() {
+        context.settingsDataStore.edit { prefs ->
+            val current = prefs[DEBUG_MENU_ENABLED_KEY] ?: false
+            prefs[DEBUG_MENU_ENABLED_KEY] = !current
+        }
+    }
+
+    /**
+     * Set the debug menu visibility state.
+     */
+    suspend fun setDebugMenuEnabled(enabled: Boolean) {
+        context.settingsDataStore.edit { prefs ->
+            prefs[DEBUG_MENU_ENABLED_KEY] = enabled
         }
     }
 }

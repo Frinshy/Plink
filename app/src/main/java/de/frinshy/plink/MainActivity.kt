@@ -2,6 +2,7 @@ package de.frinshy.plink
 
 import android.content.pm.ApplicationInfo
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -14,8 +15,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.HelpOutline
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Home
@@ -23,6 +24,7 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -31,8 +33,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
@@ -43,7 +50,9 @@ import de.frinshy.plink.data.SettingsRepository
 import de.frinshy.plink.data.ThemeMode
 import de.frinshy.plink.navigation.PlinkNavigation
 import de.frinshy.plink.navigation.PlinkRoutes
+import de.frinshy.plink.ui.components.GameTopAppBar
 import de.frinshy.plink.ui.theme.PlinkTheme
+import de.frinshy.plink.utils.GameFeedbackManager
 import de.frinshy.plink.viewmodel.GameViewModel
 import de.frinshy.plink.widgets.WidgetUpdater
 import kotlinx.coroutines.launch
@@ -63,6 +72,14 @@ class MainActivity : ComponentActivity() {
             // Settings repository for persisted UI preferences
             val settingsRepo = SettingsRepository(applicationContext)
             val themeMode by settingsRepo.themeMode.collectAsState(initial = ThemeMode.SYSTEM)
+            val isDebugMenuEnabled by settingsRepo.isDebugMenuEnabled.collectAsState(initial = false)
+
+            // Remember tap counter and coroutine scope for debug toggle
+            var titleTapCount by remember { mutableStateOf(0) }
+            val coroutineScope = rememberCoroutineScope()
+            val context = LocalContext.current
+            val feedbackManager = remember { GameFeedbackManager(context) }
+
             // Resolve boolean for PlinkTheme: when SYSTEM, use system setting
             val useDark = when (themeMode) {
                 ThemeMode.SYSTEM -> isSystemInDarkTheme()
@@ -74,12 +91,61 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
+                // Always render content below the top app bar (no overlap)
                 val isDebugBuild =
                     application?.applicationInfo?.flags?.and(ApplicationInfo.FLAG_DEBUGGABLE) != 0
+                // Show debug menu only if user has enabled it via hidden shortcut (always require 7-tap activation)
+                val showDebugMenu = isDebugMenuEnabled
                 val uiState by gameViewModel.uiState.collectAsState()
                 val isLoading = uiState.isLoading
 
                 Scaffold(
+                    topBar = {
+                        // Map current navigation route to a simple title
+                        val title = when (currentRoute) {
+                            PlinkRoutes.MAIN -> "Plink"
+                            PlinkRoutes.SHOP -> "Shop"
+                            PlinkRoutes.GAMBLE -> "Gamble"
+                            PlinkRoutes.SETTINGS -> "Settings"
+                            PlinkRoutes.DEBUG -> "Debug"
+                            else -> "Plink"
+                        }
+
+                        GameTopAppBar(
+                            title = title,
+                            onTitleClick = {
+                                // Hidden debug toggle: 7 taps on title
+                                titleTapCount++
+                                feedbackManager.lightHaptic()
+
+                                if (titleTapCount >= 7) {
+                                    titleTapCount = 0
+                                    feedbackManager.mediumHaptic()
+                                    coroutineScope.launch {
+                                        val currentState = isDebugMenuEnabled
+                                        settingsRepo.toggleDebugMenu()
+                                        val newState = !currentState
+                                        val message = if (newState) {
+                                            "Debug menu enabled! Check the bottom navigation."
+                                        } else {
+                                            "Debug menu disabled."
+                                        }
+                                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                                // Removed the navigation to main - title taps now only count towards debug toggle
+                            },
+                            actions = {
+                                // Optional/help icon placeholder
+                                IconButton(onClick = {}) {
+                                    Icon(
+                                        Icons.AutoMirrored.Filled.HelpOutline,
+                                        contentDescription = null
+                                    )
+                                }
+                            }
+                        )
+                    },
                     bottomBar = {
                         NavigationBar {
                             NavigationBarItem(
@@ -128,8 +194,8 @@ class MainActivity : ComponentActivity() {
                                 label = { Text("Settings") }
                             )
 
-                            // Show debug item only in debug builds
-                            if (isDebugBuild) {
+                            // Show debug item if debug build OR if manually enabled
+                            if (showDebugMenu) {
                                 NavigationBarItem(
                                     selected = currentRoute == PlinkRoutes.DEBUG,
                                     onClick = {
@@ -150,17 +216,22 @@ class MainActivity : ComponentActivity() {
                     }
                 ) { padding ->
                     // Apply scaffold insets
-                    val start =
-                        padding.calculateLeftPadding(layoutDirection = LayoutDirection.Ltr)
-                    val end =
-                        padding.calculateRightPadding(layoutDirection = LayoutDirection.Ltr)
+                    val start = padding.calculateLeftPadding(layoutDirection = LayoutDirection.Ltr)
+                    val end = padding.calculateRightPadding(layoutDirection = LayoutDirection.Ltr)
                     val bottom = padding.calculateBottomPadding()
+                    val top = padding.calculateTopPadding()
 
+                    // Always apply status bar and top padding so the top app bar
+                    // occupies space and content is laid out below it.
                     Surface(
                         modifier = Modifier
                             .fillMaxSize()
-                            .statusBarsPadding()
-                            .padding(start = start, end = end, bottom = bottom)
+                            .padding(
+                                start = start,
+                                end = end,
+                                top = top,
+                                bottom = bottom
+                            )
                     ) {
                         // Main navigation host
                         PlinkNavigation(

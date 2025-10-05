@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
@@ -223,9 +224,10 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     fun gamble(wager: Long, onResult: ((won: Boolean, newBalance: Long) -> Unit)? = null) {
         viewModelScope.launch {
             val won = repository.gamble(wager)
-            // Read latest state to report new balance
-            val currentState = _uiState.value.gameState
-            onResult?.invoke(won, currentState.coins)
+            // Wait a bit for the state to update and get the fresh state
+            delay(50)
+            val freshState = repository.gameState.first()
+            onResult?.invoke(won, freshState.coins)
         }
     }
 

@@ -45,7 +45,6 @@ import de.frinshy.plink.ui.components.SectionHeader
 import de.frinshy.plink.ui.components.StatChip
 import de.frinshy.plink.ui.components.UpgradeChip
 import de.frinshy.plink.ui.theme.CoinDisplayTypography
-import de.frinshy.plink.ui.theme.GameTitleTypography
 import de.frinshy.plink.ui.theme.PlinkTheme
 import de.frinshy.plink.ui.theme.Spacing
 import de.frinshy.plink.ui.theme.coinGold
@@ -103,15 +102,6 @@ fun MainScreen(
             .padding(Spacing.screenPadding),
         verticalArrangement = Arrangement.spacedBy(Spacing.sectionSpacing)
     ) {
-        // App title
-        Text(
-            text = "Plink",
-            style = GameTitleTypography,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center
-        )
-
         // Coin display
         PrimaryGameCard {
             Column(

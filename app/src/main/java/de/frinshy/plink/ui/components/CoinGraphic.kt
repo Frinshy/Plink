@@ -29,6 +29,7 @@ import de.frinshy.plink.ui.theme.coinShine
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.min
+import kotlin.random.Random
 
 /** Draws a stylized coin using Canvas. Sizes itself to [size]. */
 @Composable
@@ -101,6 +102,7 @@ fun AnimatedCoinGraphic(
     modifier: Modifier = Modifier,
     size: Dp = 96.dp,
     flipTrigger: Int = 0,
+    result: Boolean? = null,
     onFlipComplete: ((heads: Boolean) -> Unit)? = null,
     rimColor: Color = coinGoldDark,
     faceColor: Color = coinGold,
@@ -115,7 +117,8 @@ fun AnimatedCoinGraphic(
 
             // Random number of flips (3-7 full rotations)
             val flips = (3..7).random()
-            val finalResult = kotlin.random.Random.nextBoolean()
+            // Use provided result or fallback to random for preview/testing
+            val finalResult = result ?: Random.nextBoolean()
 
             // Start with a slight bounce
             scale.animateTo(1.1f, animationSpec = tween(150, easing = FastOutSlowInEasing))
