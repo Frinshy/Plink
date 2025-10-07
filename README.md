@@ -51,6 +51,15 @@ grow!
 - **Debug Screen**: Developer tools for testing and debugging (debug builds only)
 - **Game State Management**: View and modify game state for testing purposes
 
+## 🎬 Demo Video
+
+<div align="center">
+  <video src="https://github.com/user-attachments/assets/45ee7f36-993e-462a-adbb-2943d626654d" controls width="320">
+    Your browser does not support the video tag. Link to Video: https://github.com/user-attachments/assets/45ee7f36-993e-462a-adbb-2943d626654d
+  </video>
+  <p><em>Watch Plink in action!</em></p>
+</div>
+
 ## 📱 Screenshots
 
 <!-- Main Game Screen -->
