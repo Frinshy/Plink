@@ -55,38 +55,38 @@ grow!
 
 <!-- Main Game Screen -->
 <div align="center">
-  <img src="[SCREENSHOT_PLACEHOLDER_MAIN_SCREEN]" alt="Main Game Screen" width="250"/>
+  <img src="https://github.com/user-attachments/assets/2b9d2d60-db72-4cc7-bd3b-049a6e9d2d5d" alt="Main Game Screen" width="250"/>
   <p><em>Main game screen with tap button and coin display</em></p>
 </div>
 
 <!-- Shop Screen -->
 <div align="center">
-  <img src="[SCREENSHOT_PLACEHOLDER_SHOP_SCREEN]" alt="Shop Screen" width="250"/>
+  <img src="https://github.com/user-attachments/assets/f5ba79cf-9068-4ced-b47b-3b0531dde4e0" alt="Shop Screen" width="250"/>
   <p><em>Shop screen showing available upgrades</em></p>
 </div>
 
 <!-- Gambling Screen -->
 <div align="center">
-  <img src="[SCREENSHOT_PLACEHOLDER_GAMBLE_SCREEN]" alt="Gambling Screen" width="250"/>
+  <img src="https://github.com/user-attachments/assets/9662da69-d068-4c01-853c-51b324bf7f24" alt="Gambling Screen" width="250"/>
   <p><em>Gambling mini-game interface</em></p>
 </div>
 
 <!-- Settings Screen -->
 <div align="center">
-  <img src="[SCREENSHOT_PLACEHOLDER_SETTINGS_SCREEN]" alt="Settings Screen" width="250"/>
+  <img src="https://github.com/user-attachments/assets/56169df0-9e34-4f4d-b0dd-408c8eea28fd" alt="Settings Screen" width="250"/>
   <p><em>Settings and customization options</em></p>
 </div>
 
 <!-- Home Screen Widget -->
 <div align="center">
-  <img src="[SCREENSHOT_PLACEHOLDER_WIDGET]" alt="Home Screen Widget" width="250"/>
+  <img src="https://github.com/user-attachments/assets/49102234-f5e3-41df-abb1-47f4e9e613f1" alt="Home Screen Widget" width="250"/>
   <p><em>Home screen widget displaying coin balance</em></p>
 </div>
 
 <!-- Theme Comparison -->
 <div align="center">
-  <img src="[SCREENSHOT_PLACEHOLDER_LIGHT_THEME]" alt="Light Theme" width="200"/>
-  <img src="[SCREENSHOT_PLACEHOLDER_DARK_THEME]" alt="Dark Theme" width="200"/>
+  <img src="https://github.com/user-attachments/assets/fcc2bf69-6019-4a8a-9ddb-a6a59112769e" alt="Light Theme" width="200"/>
+  <img src="https://github.com/user-attachments/assets/660cc69b-fea9-4c0f-b56c-9ab859705e9c" alt="Dark Theme" width="200"/>
   <p><em>Light and Dark theme options</em></p>
 </div>
 
