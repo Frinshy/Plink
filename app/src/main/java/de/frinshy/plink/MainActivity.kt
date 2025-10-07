@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.HelpOutline
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Home
@@ -24,7 +23,6 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -92,8 +90,7 @@ class MainActivity : ComponentActivity() {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
                 // Always render content below the top app bar (no overlap)
-                val isDebugBuild =
-                    application?.applicationInfo?.flags?.and(ApplicationInfo.FLAG_DEBUGGABLE) != 0
+                application?.applicationInfo?.flags?.and(ApplicationInfo.FLAG_DEBUGGABLE) != 0
                 // Show debug menu only if user has enabled it via hidden shortcut (always require 7-tap activation)
                 val showDebugMenu = isDebugMenuEnabled
                 val uiState by gameViewModel.uiState.collectAsState()
@@ -132,16 +129,6 @@ class MainActivity : ComponentActivity() {
                                         }
                                         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                                     }
-                                }
-                                // Removed the navigation to main - title taps now only count towards debug toggle
-                            },
-                            actions = {
-                                // Optional/help icon placeholder
-                                IconButton(onClick = {}) {
-                                    Icon(
-                                        Icons.AutoMirrored.Filled.HelpOutline,
-                                        contentDescription = null
-                                    )
                                 }
                             }
                         )
