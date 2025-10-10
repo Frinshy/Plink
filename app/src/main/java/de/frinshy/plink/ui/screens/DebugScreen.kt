@@ -47,10 +47,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import de.frinshy.plink.ui.theme.PlinkTheme
 import de.frinshy.plink.utils.NumberFormatter
 import de.frinshy.plink.viewmodel.GameViewModel
 
@@ -61,54 +59,40 @@ fun DebugScreen(
 ) {
     val uiState by gameViewModel.uiState.collectAsState()
     var coinInput by remember { mutableStateOf("") }
-    var showConfirmDialog by remember { mutableStateOf(false) }
-    var pendingAction by remember { mutableStateOf<String?>(null) }
+    var showConfirm by remember { mutableStateOf(false) }
+    var actionPending by remember { mutableStateOf<String?>(null) }
 
     Surface(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-        ) {
-
-            // Warning banner (development mode)
-            val bannerContainer = MaterialTheme.colorScheme.tertiaryContainer
-            val bannerTint = MaterialTheme.colorScheme.onTertiaryContainer
+        Column(modifier = Modifier.fillMaxSize()) {
+            val bannerBg = MaterialTheme.colorScheme.tertiaryContainer
+            val bannerFg = MaterialTheme.colorScheme.onTertiaryContainer
 
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = bannerContainer,
-                    contentColor = bannerTint
-                )
+                colors = CardDefaults.cardColors(containerColor = bannerBg, contentColor = bannerFg)
             ) {
                 Row(
                     modifier = Modifier.padding(16.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Warning,
-                        contentDescription = null,
-                        tint = bannerTint
-                    )
+                    Icon(Icons.Default.Warning, contentDescription = null, tint = bannerFg)
                     Column {
                         Text(
-                            text = "Development Mode",
+                            "Development Mode",
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.SemiBold,
-                            color = bannerTint
+                            color = bannerFg
                         )
                         Text(
-                            text = "These actions will modify your game progress",
+                            "These actions will modify your game progress",
                             style = MaterialTheme.typography.bodySmall,
-                            color = bannerTint.copy(alpha = 0.85f)
+                            color = bannerFg.copy(alpha = 0.85f)
                         )
                     }
                 }
@@ -119,12 +103,8 @@ fun DebugScreen(
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // Game state card
-                item {
-                    GameStateCard(uiState = uiState)
-                }
+                item { GameStateCard(uiState = uiState) }
 
-                // Manual controls
                 item {
                     ManualControlsCard(
                         coinInput = coinInput,
@@ -136,48 +116,45 @@ fun DebugScreen(
                             }
                         },
                         onResetGame = {
-                            pendingAction = "reset"
-                            showConfirmDialog = true
+                            actionPending = "reset"
+                            showConfirm = true
                         }
                     )
                 }
 
-                // Quick actions
                 item {
                     QuickActionsCard(
                         onAdd1K = { gameViewModel.debugAddCoins(1000) },
-                        onAdd10K = { gameViewModel.debugAddCoins(10000) },
+                        onAdd10K = { gameViewModel.debugAddCoins(10_000) },
                         onAdd1M = { gameViewModel.debugAddCoins(1_000_000) },
                         onMaxUpgrades = {
-                            pendingAction = "maxUpgrades"
-                            showConfirmDialog = true
+                            actionPending = "maxUpgrades"
+                            showConfirm = true
                         }
                     )
                 }
 
-                // Bottom spacing
                 item { Spacer(modifier = Modifier.height(16.dp)) }
             }
         }
     }
 
-    // Confirmation dialog
-    if (showConfirmDialog) {
+    if (showConfirm) {
         AlertDialog(
             onDismissRequest = {
-                showConfirmDialog = false
-                pendingAction = null
+                showConfirm = false
+                actionPending = null
             },
             icon = {
                 Icon(
-                    imageVector = Icons.Default.Warning,
+                    Icons.Default.Warning,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.error
                 )
             },
             title = {
                 Text(
-                    when (pendingAction) {
+                    when (actionPending) {
                         "reset" -> "Reset Game"
                         "maxUpgrades" -> "Max All Upgrades"
                         else -> "Confirm Action"
@@ -186,7 +163,7 @@ fun DebugScreen(
             },
             text = {
                 Text(
-                    when (pendingAction) {
+                    when (actionPending) {
                         "reset" -> "Are you sure you want to reset the game? This will clear all progress permanently."
                         "maxUpgrades" -> "This will set all upgrades to maximum level and add coins. Continue?"
                         else -> "Are you sure you want to perform this action?"
@@ -196,30 +173,23 @@ fun DebugScreen(
             confirmButton = {
                 Button(
                     onClick = {
-                        when (pendingAction) {
+                        when (actionPending) {
                             "reset" -> gameViewModel.debugResetGame()
                             "maxUpgrades" -> gameViewModel.debugMaxUpgrades()
                         }
-                        showConfirmDialog = false
-                        pendingAction = null
+                        showConfirm = false
+                        actionPending = null
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.error,
                         contentColor = MaterialTheme.colorScheme.onError
                     )
-                ) {
-                    Text("Confirm")
-                }
+                ) { Text("Confirm") }
             },
             dismissButton = {
-                TextButton(
-                    onClick = {
-                        showConfirmDialog = false
-                        pendingAction = null
-                    }
-                ) {
-                    Text("Cancel")
-                }
+                TextButton(onClick = {
+                    showConfirm = false; actionPending = null
+                }) { Text("Cancel") }
             }
         )
     }
@@ -279,7 +249,6 @@ private fun GameStateCard(uiState: de.frinshy.plink.viewmodel.GameUiState) {
                     label = "Auto Collectors",
                     value = "${uiState.gameState.upgradeLevels["auto_collector"] ?: 0}"
                 )
-                // Auto Collector Upgrade Level removed
             }
         }
     }
@@ -354,11 +323,9 @@ private fun ManualControlsCard(
                     colors = ButtonDefaults.outlinedButtonColors(
                         contentColor = MaterialTheme.colorScheme.error
                     ),
-                    border = ButtonDefaults.outlinedButtonBorder.copy(
-                        brush = androidx.compose.foundation.BorderStroke(
-                            1.dp,
-                            MaterialTheme.colorScheme.error
-                        ).brush
+                    border = androidx.compose.foundation.BorderStroke(
+                        1.dp,
+                        MaterialTheme.colorScheme.error
                     )
                 ) {
                     Icon(
@@ -522,14 +489,5 @@ private fun DebugInfoRow(
                 fontWeight = FontWeight.SemiBold
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DebugScreenPreview() {
-    PlinkTheme {
-        DebugScreen(
-        )
     }
 }

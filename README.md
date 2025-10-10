@@ -23,22 +23,10 @@ grow!
 
 - **Better Finger**: Increases coins earned per tap (max level 50)
 - **Auto Collector**: Generates 1 coin per second automatically (max level 25)
-- **Dynamic Pricing**: Upgrade costs increase with each purchase level
 
 ### 🎰 Gambling Mini-Game
 
 - **Risk & Reward**: Bet your coins for a chance to multiply them
-- **Customizable Bets**: Set your own bet amount
-- **Animated Results**: Engaging visual feedback for wins and losses
-
-### 🎨 Customization & Settings
-
-- **Theme Options**:
-  - Light Mode
-  - Dark Mode
-  - System Default (follows device theme)
-- **Haptic Feedback**: Optional vibration on tap (requires vibrate permission)
-- **Persistent Settings**: All preferences saved using DataStore
 
 ### 📱 Home Screen Widget
 

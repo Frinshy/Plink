@@ -4,31 +4,58 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.TouchApp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import de.frinshy.plink.ui.theme.PlinkTheme
 import de.frinshy.plink.ui.theme.Spacing
 
-/**
- * A reusable component that displays a statistic with an icon, label, and value.
- * Used to show game statistics like "Per Click", "Per Second", etc.
- */
+@Immutable
+data class StatData(
+    val icon: ImageVector,
+    val label: String,
+    val value: String
+)
+
+@Composable
+private fun StatIcon(icon: ImageVector, modifier: Modifier = Modifier) {
+    Icon(
+        imageVector = icon,
+        contentDescription = null,
+        modifier = modifier.size(20.dp),
+        tint = MaterialTheme.colorScheme.primary
+    )
+}
+
+@Composable
+private fun StatLabel(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+    )
+}
+
+@Composable
+private fun StatValue(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.titleSmall,
+        fontWeight = FontWeight.SemiBold,
+        color = MaterialTheme.colorScheme.onSurface
+    )
+}
+
 @Composable
 fun StatChip(
-    icon: ImageVector,
-    label: String,
-    value: String,
+    data: StatData,
     modifier: Modifier = Modifier
 ) {
     Surface(
@@ -42,35 +69,9 @@ fun StatChip(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Spacing.extraSmall)
         ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                modifier = Modifier.size(20.dp),
-                tint = MaterialTheme.colorScheme.primary
-            )
-            Text(
-                text = label,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-            )
-            Text(
-                text = value,
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            StatIcon(icon = data.icon)
+            StatLabel(text = data.label)
+            StatValue(text = data.value)
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun StatChipPreview() {
-    PlinkTheme {
-        StatChip(
-            icon = Icons.Outlined.TouchApp,
-            label = "Per Click",
-            value = "1.2K"
-        )
     }
 }

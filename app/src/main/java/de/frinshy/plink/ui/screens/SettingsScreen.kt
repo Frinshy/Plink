@@ -48,20 +48,15 @@ fun SettingsScreen(
             .padding(Spacing.screenPadding),
         verticalArrangement = Arrangement.spacedBy(Spacing.sectionSpacing)
     ) {
-        // Appearance Settings Card
         PrimaryGameCard {
             Column(
                 modifier = Modifier.padding(Spacing.cardPadding),
                 verticalArrangement = Arrangement.spacedBy(Spacing.medium)
             ) {
-                SectionHeader(
-                    title = "Appearance",
-                    icon = Icons.Outlined.Palette
-                )
+                SectionHeader(title = "Appearance", icon = Icons.Outlined.Palette)
 
                 Spacer(modifier = Modifier.height(Spacing.small))
 
-                // Theme selection with better styling
                 Text(
                     text = "Theme",
                     style = MaterialTheme.typography.titleMedium,
@@ -85,9 +80,7 @@ fun SettingsScreen(
                             label = label,
                             selected = themeMode == mode,
                             onClick = {
-                                coroutineScope.launch {
-                                    settingsRepository.setThemeMode(mode)
-                                }
+                                coroutineScope.launch { settingsRepository.setThemeMode(mode) }
                             }
                         )
                     }
@@ -119,7 +112,7 @@ private fun ThemeOptionRow(
     ) {
         RadioButton(
             selected = selected,
-            onClick = null, // handled by Row's clickable
+            onClick = null,
             colors = RadioButtonDefaults.colors(
                 selectedColor = MaterialTheme.colorScheme.primary,
                 unselectedColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.6f)
@@ -133,7 +126,7 @@ private fun ThemeOptionRow(
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 fontWeight = if (selected) FontWeight.Medium else FontWeight.Normal
             )
-            // Add description for system theme option
+
             if (mode == ThemeMode.SYSTEM) {
                 Text(
                     text = "Automatically switch between light and dark themes",

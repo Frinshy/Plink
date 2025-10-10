@@ -39,19 +39,17 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.frinshy.plink.data.Upgrade
 import de.frinshy.plink.ui.components.PrimaryGameCard
-import de.frinshy.plink.ui.theme.CoinDisplayTypography
+import de.frinshy.plink.ui.theme.Color.coinGold
+import de.frinshy.plink.ui.theme.Color.successGreen
 import de.frinshy.plink.ui.theme.PlinkTheme
 import de.frinshy.plink.ui.theme.Spacing
-import de.frinshy.plink.ui.theme.UpgradePriceTypography
-import de.frinshy.plink.ui.theme.coinGold
-import de.frinshy.plink.ui.theme.successGreen
+
 import de.frinshy.plink.utils.NumberFormatter
 import de.frinshy.plink.viewmodel.GameViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShopScreen(
-    onNavigateBack: () -> Unit,
     gameViewModel: GameViewModel = viewModel()
 ) {
     val uiState by gameViewModel.uiState.collectAsState()
@@ -62,10 +60,10 @@ fun ShopScreen(
             .fillMaxSize()
             .padding(horizontal = Spacing.screenPadding)
     ) {
-        // Coin balance with consistent spacing
+
         CoinBalanceCard(coins = gameState.coins)
 
-        // Upgrades list
+
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(vertical = Spacing.small),
@@ -76,14 +74,11 @@ fun ShopScreen(
                     upgrade = upgrade,
                     currentLevel = gameViewModel.getUpgradeLevel(upgrade),
                     coins = gameState.coins,
-                    onPurchase = { gameViewModel.purchaseUpgrade(upgrade) }
-                )
+                    onPurchase = { gameViewModel.purchaseUpgrade(upgrade) })
             }
 
-            // Bottom padding for list
-            item {
-                Spacer(modifier = Modifier.height(Spacing.medium))
-            }
+
+            item { Spacer(modifier = Modifier.height(Spacing.medium)) }
         }
     }
 }
@@ -97,8 +92,7 @@ private fun CoinBalanceCard(coins: Long) {
             horizontalArrangement = Arrangement.spacedBy(Spacing.medium)
         ) {
             Surface(
-                shape = MaterialTheme.shapes.small,
-                color = coinGold.copy(alpha = 0.2f)
+                shape = MaterialTheme.shapes.small, color = coinGold.copy(alpha = 0.2f)
             ) {
                 Text(
                     text = "💰",
@@ -115,9 +109,7 @@ private fun CoinBalanceCard(coins: Long) {
                 )
                 Text(
                     text = NumberFormatter.formatNumber(coins),
-                    style = CoinDisplayTypography.copy(
-                        fontSize = MaterialTheme.typography.headlineMedium.fontSize
-                    ),
+                    style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
                     color = coinGold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -129,39 +121,31 @@ private fun CoinBalanceCard(coins: Long) {
 
 @Composable
 private fun UpgradeCard(
-    upgrade: Upgrade,
-    currentLevel: Int,
-    coins: Long,
-    onPurchase: () -> Unit
+    upgrade: Upgrade, currentLevel: Int, coins: Long, onPurchase: () -> Unit
 ) {
     val isAffordable = upgrade.isAffordable(coins, currentLevel)
     val isPurchasable = upgrade.isPurchasable(currentLevel)
     val canPurchase = isAffordable && isPurchasable
     val currentPrice = if (isPurchasable) upgrade.getCurrentPrice(currentLevel) else 0L
 
-    val (icon, containerColor) = when (upgrade) {
-        is Upgrade.TapUpgrade -> Icons.Outlined.TouchApp to MaterialTheme.colorScheme.primaryContainer
-        is Upgrade.AutoCollector -> Icons.Outlined.AutoAwesome to MaterialTheme.colorScheme.secondaryContainer
+    val icon = when (upgrade) {
+        is Upgrade.TapUpgrade -> Icons.Outlined.TouchApp
+        is Upgrade.AutoCollector -> Icons.Outlined.AutoAwesome
     }
 
     ElevatedCard(
-        modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.elevatedCardElevation(
+        modifier = Modifier.fillMaxWidth(), elevation = CardDefaults.elevatedCardElevation(
             defaultElevation = if (canPurchase) 6.dp else 2.dp
-        ),
-        colors = CardDefaults.elevatedCardColors(
-            containerColor = if (canPurchase) containerColor else MaterialTheme.colorScheme.surfaceVariant,
-            contentColor = if (canPurchase)
-                MaterialTheme.colorScheme.onPrimaryContainer
-            else
-                MaterialTheme.colorScheme.onSurfaceVariant
+        ), colors = CardDefaults.elevatedCardColors(
+            containerColor = if (canPurchase) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surfaceVariant,
+            contentColor = if (canPurchase) MaterialTheme.colorScheme.onPrimaryContainer
+            else MaterialTheme.colorScheme.onSurfaceVariant
         )
     ) {
         Column(
-            modifier = Modifier.padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Header with icon, title and level
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -174,19 +158,15 @@ private fun UpgradeCard(
                 ) {
                     Surface(
                         shape = MaterialTheme.shapes.small,
-                        color = if (canPurchase)
-                            MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
-                        else
-                            MaterialTheme.colorScheme.outline.copy(alpha = 0.12f)
+                        color = if (canPurchase) MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+                        else MaterialTheme.colorScheme.outline.copy(alpha = 0.12f)
                     ) {
                         Icon(
                             imageVector = icon,
                             contentDescription = null,
                             modifier = Modifier.padding(8.dp),
-                            tint = if (canPurchase)
-                                MaterialTheme.colorScheme.primary
-                            else
-                                MaterialTheme.colorScheme.outline
+                            tint = if (canPurchase) MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.outline
                         )
                     }
 
@@ -208,7 +188,7 @@ private fun UpgradeCard(
                     }
                 }
 
-                // Level badge
+
                 if (currentLevel > 0) {
                     Surface(
                         shape = MaterialTheme.shapes.small,
@@ -235,7 +215,7 @@ private fun UpgradeCard(
                 }
             }
 
-            // Price and purchase button
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -250,11 +230,8 @@ private fun UpgradeCard(
                     if (isPurchasable) {
                         Text(
                             text = "${NumberFormatter.formatNumber(currentPrice)} coins",
-                            style = UpgradePriceTypography,
-                            color = if (isAffordable)
-                                MaterialTheme.colorScheme.primary
-                            else
-                                MaterialTheme.colorScheme.error
+                            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
+                            color = if (isAffordable) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
                         )
                     } else {
                         Text(
@@ -285,7 +262,7 @@ private fun UpgradeCard(
                     }
                 } else {
                     AssistChip(
-                        onClick = { /* No action for completed */ },
+                        onClick = { },
                         label = { Text("Maxed") },
                         enabled = false,
                         colors = AssistChipDefaults.assistChipColors(
@@ -306,7 +283,6 @@ private fun UpgradeCard(
 fun ShopScreenPreview() {
     PlinkTheme {
         ShopScreen(
-            onNavigateBack = {}
         )
     }
 }

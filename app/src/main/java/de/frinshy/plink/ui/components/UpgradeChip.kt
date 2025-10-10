@@ -9,15 +9,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import de.frinshy.plink.ui.theme.PlinkTheme
 
-/**
- * A reusable component that displays an upgrade with its level.
- * Shows different styling based on whether the upgrade has been purchased.
- */
 @Composable
 fun UpgradeChip(
     label: String,
@@ -25,6 +22,8 @@ fun UpgradeChip(
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null
 ) {
+    val isActive = level > 0
+
     AssistChip(
         onClick = { onClick?.invoke() },
         label = {
@@ -33,29 +32,16 @@ fun UpgradeChip(
                 style = MaterialTheme.typography.labelMedium
             )
         },
-        trailingIcon = if (level > 0) {
-            {
-                Surface(
-                    shape = CircleShape,
-                    color = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                ) {
-                    Text(
-                        text = level.toString(),
-                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            }
+        trailingIcon = if (isActive) {
+            { LevelBadge(level) }
         } else null,
-        modifier = modifier,
+        modifier = modifier.semantics { role = Role.Button },
         colors = AssistChipDefaults.assistChipColors(
-            containerColor = if (level > 0)
+            containerColor = if (isActive)
                 MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
             else
                 MaterialTheme.colorScheme.surface,
-            labelColor = if (level > 0)
+            labelColor = if (isActive)
                 MaterialTheme.colorScheme.primary
             else
                 MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
@@ -63,24 +49,18 @@ fun UpgradeChip(
     )
 }
 
-@Preview(showBackground = true)
 @Composable
-fun UpgradeChipPreview() {
-    PlinkTheme {
-        UpgradeChip(
-            label = "Tap Power",
-            level = 5
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun UpgradeChipNoLevelPreview() {
-    PlinkTheme {
-        UpgradeChip(
-            label = "Not Purchased",
-            level = 0
+private fun LevelBadge(level: Int) {
+    Surface(
+        shape = CircleShape,
+        color = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary
+    ) {
+        Text(
+            text = level.toString(),
+            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = FontWeight.Bold
         )
     }
 }

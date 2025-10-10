@@ -12,7 +12,6 @@ import androidx.glance.LocalSize
 import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
-import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.layout.Alignment
@@ -30,17 +29,14 @@ import de.frinshy.plink.utils.NumberFormatter
 
 class CoinsWidget : GlanceAppWidget() {
 
-    override val sizeMode: SizeMode = SizeMode.Exact
-
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        // Read the latest game state from repository (DataStore) and pass coins into the Glance UI
+
         val repo = GameRepository(context)
 
         val clickModifier = GlanceModifier.clickable(actionStartActivity<MainActivity>())
 
         provideContent {
             GlanceTheme {
-                // create your AppWidget here and provide the formatted coins
                 MyContent(repo, clickModifier)
             }
         }
@@ -56,10 +52,8 @@ class CoinsWidget : GlanceAppWidget() {
         val formattedTotal =
             currentState?.let { NumberFormatter.formatNumber(it.totalCoinsEarned) } ?: "..."
 
-        // Get available size and determine layout variant
         val size = LocalSize.current
 
-        // Define size categories with adjusted breakpoints for better readability
         val widgetLayout = when {
             size.width < 80.dp || size.height < 50.dp -> WidgetLayout.MINIMAL
             size.width < 140.dp || size.height < 70.dp -> WidgetLayout.COMPACT
@@ -67,7 +61,6 @@ class CoinsWidget : GlanceAppWidget() {
             else -> WidgetLayout.LARGE
         }
 
-        // Adjust font sizes based on coin text length to prevent overflow
         val coinTextLength = formattedCoins.length
         val fontSizeModifier = when {
             coinTextLength > 15 -> 0.75f
@@ -77,7 +70,6 @@ class CoinsWidget : GlanceAppWidget() {
 
         when (widgetLayout) {
             WidgetLayout.MINIMAL -> {
-                // Minimal layout: Only coin emoji and number
                 Column(
                     modifier = GlanceModifier
                         .fillMaxSize()
@@ -105,7 +97,6 @@ class CoinsWidget : GlanceAppWidget() {
             }
 
             WidgetLayout.COMPACT -> {
-                // Compact layout: Coin and number with minimal spacing
                 Column(
                     modifier = GlanceModifier
                         .fillMaxSize()
@@ -134,7 +125,6 @@ class CoinsWidget : GlanceAppWidget() {
             }
 
             WidgetLayout.MEDIUM -> {
-                // Medium layout: Coin, title, and main number
                 Column(
                     modifier = GlanceModifier
                         .fillMaxSize()
@@ -144,7 +134,6 @@ class CoinsWidget : GlanceAppWidget() {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // Title row with coin and label
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = GlanceModifier.padding(bottom = 6.dp)
@@ -163,7 +152,6 @@ class CoinsWidget : GlanceAppWidget() {
                         )
                     }
 
-                    // Main coin display
                     Text(
                         text = formattedCoins,
                         style = TextStyle(
@@ -175,7 +163,6 @@ class CoinsWidget : GlanceAppWidget() {
             }
 
             WidgetLayout.LARGE -> {
-                // Large layout: Full experience with all information
                 Column(
                     modifier = GlanceModifier
                         .fillMaxSize()
@@ -185,7 +172,6 @@ class CoinsWidget : GlanceAppWidget() {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // Title row with coin image and proper spacing
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = GlanceModifier.padding(bottom = 8.dp)
@@ -204,7 +190,6 @@ class CoinsWidget : GlanceAppWidget() {
                         )
                     }
 
-                    // Main coin display with proper hierarchy
                     Text(
                         text = formattedCoins,
                         style = TextStyle(
@@ -215,7 +200,6 @@ class CoinsWidget : GlanceAppWidget() {
 
                     Spacer(modifier = GlanceModifier.height(6.dp))
 
-                    // Additional stats with better styling
                     Text(
                         text = "Total: $formattedTotal",
                         style = TextStyle(
@@ -228,11 +212,10 @@ class CoinsWidget : GlanceAppWidget() {
         }
     }
 
-    // Enum to define widget layout types
     private enum class WidgetLayout {
-        MINIMAL,    // < 80dp width or < 50dp height
-        COMPACT,    // < 140dp width or < 70dp height  
-        MEDIUM,     // < 200dp width or < 100dp height
-        LARGE       // >= 200dp width and >= 100dp height
+        MINIMAL,
+        COMPACT,
+        MEDIUM,
+        LARGE
     }
 }

@@ -1,6 +1,5 @@
 package de.frinshy.plink.ui.screens
 
-/** MainScreen: primary game UI (balance, tap target, upgrades). */
 
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -32,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.frinshy.plink.data.GameState
@@ -43,18 +41,17 @@ import de.frinshy.plink.ui.components.PrimaryGameCard
 import de.frinshy.plink.ui.components.SecondaryGameCard
 import de.frinshy.plink.ui.components.SectionHeader
 import de.frinshy.plink.ui.components.StatChip
+import de.frinshy.plink.ui.components.StatData
 import de.frinshy.plink.ui.components.UpgradeChip
-import de.frinshy.plink.ui.theme.CoinDisplayTypography
-import de.frinshy.plink.ui.theme.PlinkTheme
+import de.frinshy.plink.ui.theme.Color.coinGold
 import de.frinshy.plink.ui.theme.Spacing
-import de.frinshy.plink.ui.theme.coinGold
+import de.frinshy.plink.ui.theme.TextStyle.CoinDisplayTypography
 import de.frinshy.plink.utils.NumberFormatter
 import de.frinshy.plink.viewmodel.GameUiState
 import de.frinshy.plink.viewmodel.GameViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-        /** Main game screen: coin display, tap button and upgrades overview. */
 fun MainScreen(
     onNavigateToShop: () -> Unit,
     gameViewModel: GameViewModel = viewModel()
@@ -62,27 +59,17 @@ fun MainScreen(
     val uiState: GameUiState by gameViewModel.uiState.collectAsState()
     val gameState = uiState.gameState
 
-    // Notify ViewModel that the main screen is visible while this composable is
-    // in composition. This ensures auto-collector runs only when the main game
-    // screen is actually shown.
     DisposableEffect(Unit) {
         gameViewModel.setMainScreenVisible(true)
-        onDispose {
-            gameViewModel.setMainScreenVisible(false)
-        }
+        onDispose { gameViewModel.setMainScreenVisible(false) }
     }
 
-    // Animatable scale for tap-press animation
     val coinButtonScale = remember { androidx.compose.animation.core.Animatable(1f) }
-
-    // Track last seen tap counter so each increment triggers an animation
     var lastTapCounter by remember { mutableIntStateOf(uiState.tapAnimationCounter) }
 
     LaunchedEffect(uiState.tapAnimationCounter) {
-        // Run one press animation per counter increment (robust for rapid taps)
         if (uiState.tapAnimationCounter != lastTapCounter) {
             lastTapCounter = uiState.tapAnimationCounter
-            // quick press then spring back
             coinButtonScale.snapTo(0.88f)
             coinButtonScale.animateTo(
                 targetValue = 1f,
@@ -94,15 +81,12 @@ fun MainScreen(
         }
     }
 
-    // Locking the app to portrait allows us to use weight/fill to make the coin
-    // area fill the available screen space reliably.
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(Spacing.screenPadding),
         verticalArrangement = Arrangement.spacedBy(Spacing.sectionSpacing)
     ) {
-        // Coin display
         PrimaryGameCard {
             Column(
                 modifier = Modifier.padding(Spacing.cardPadding),
@@ -127,17 +111,21 @@ fun MainScreen(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     StatChip(
-                        icon = Icons.Outlined.TouchApp,
-                        label = "Per Click",
-                        value = NumberFormatter.formatNumber(gameState.coinsPerTap.toLong()),
+                        data = StatData(
+                            icon = Icons.Outlined.TouchApp,
+                            label = "Per Click",
+                            value = NumberFormatter.formatNumber(gameState.coinsPerTap.toLong())
+                        ),
                         modifier = Modifier.weight(1f)
                     )
+
                     StatChip(
-                        icon = Icons.Outlined.AutoAwesome,
-                        label = "Per Second",
-                        // Auto coins per second derived from auto collector count
-                        value = NumberFormatter.formatNumber(
-                            (gameState.upgradeLevels["auto_collector"] ?: 0).toLong()
+                        data = StatData(
+                            icon = Icons.Outlined.AutoAwesome,
+                            label = "Per Second",
+                            value = NumberFormatter.formatNumber(
+                                (gameState.upgradeLevels["auto_collector"] ?: 0).toLong()
+                            )
                         ),
                         modifier = Modifier.weight(1f)
                     )
@@ -145,32 +133,22 @@ fun MainScreen(
             }
         }
 
-        // Main coin button
-        // Main coin area: fill the remaining screen space so the coin is large
-        // and centered on portrait phones.
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .weight(1f),
-            contentAlignment = Alignment.Center
+                .weight(1f), contentAlignment = Alignment.Center
         ) {
             CircularGameButton(
-                onClick = {
-                    gameViewModel.onCoinTap()
-                },
+                onClick = { gameViewModel.onCoinTap() },
                 modifier = Modifier
                     .sizeIn(maxWidth = 240.dp, maxHeight = 240.dp)
                     .scale(coinButtonScale.value)
             ) {
-                // Canvas-drawn coin graphic (fixed inside the button)
                 CoinGraphic(size = 200.dp)
             }
         }
-        // Upgrades overview
-        UpgradesOverviewCard(
-            gameState = gameState,
-            onShopClick = onNavigateToShop
-        )
+
+        UpgradesOverviewCard(gameState = gameState, onShopClick = onNavigateToShop)
     }
 }
 
@@ -211,15 +189,5 @@ private fun UpgradesOverviewCard(
                 icon = Icons.Default.ShoppingCart
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MainScreenPreview() {
-    PlinkTheme {
-        MainScreen(
-            onNavigateToShop = {}
-        )
     }
 }

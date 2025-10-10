@@ -1,7 +1,5 @@
 package de.frinshy.plink.ui.theme
 
-/** Theme definitions and helpers for the Plink app. */
-
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -16,100 +14,97 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-// Material 3 Light Color Scheme for Plink
-private val PlinkLightColorScheme = lightColorScheme(
-    primary = primaryLight,
-    onPrimary = onPrimaryLight,
-    primaryContainer = primaryContainerLight,
-    onPrimaryContainer = onPrimaryContainerLight,
+private val LightColorScheme = lightColorScheme(
+    primary = Color.primaryLight,
+    onPrimary = Color.onPrimaryLight,
+    primaryContainer = Color.primaryContainerLight,
+    onPrimaryContainer = Color.onPrimaryContainerLight,
 
-    secondary = secondaryLight,
-    onSecondary = onSecondaryLight,
-    secondaryContainer = secondaryContainerLight,
-    onSecondaryContainer = onSecondaryContainerLight,
+    secondary = Color.secondaryLight,
+    onSecondary = Color.onSecondaryLight,
+    secondaryContainer = Color.secondaryContainerLight,
+    onSecondaryContainer = Color.onSecondaryContainerLight,
 
-    tertiary = tertiaryLight,
-    onTertiary = onTertiaryLight,
-    tertiaryContainer = tertiaryContainerLight,
-    onTertiaryContainer = onTertiaryContainerLight,
+    tertiary = Color.tertiaryLight,
+    onTertiary = Color.onTertiaryLight,
+    tertiaryContainer = Color.tertiaryContainerLight,
+    onTertiaryContainer = Color.onTertiaryContainerLight,
 
-    error = errorLight,
-    onError = onErrorLight,
-    errorContainer = errorContainerLight,
-    onErrorContainer = onErrorContainerLight,
+    error = Color.errorLight,
+    onError = Color.onErrorLight,
+    errorContainer = Color.errorContainerLight,
+    onErrorContainer = Color.onErrorContainerLight,
 
-    background = backgroundLight,
-    onBackground = onSurfaceLight,
+    background = Color.backgroundLight,
+    onBackground = Color.onSurfaceLight,
 
-    surface = surfaceLight,
-    onSurface = onSurfaceLight,
-    surfaceVariant = surfaceContainerLight,
-    onSurfaceVariant = onSurfaceVariantLight,
+    surface = Color.surfaceLight,
+    onSurface = Color.onSurfaceLight,
+    surfaceVariant = Color.surfaceContainerLight,
+    onSurfaceVariant = Color.onSurfaceVariantLight,
 
-    surfaceContainer = surfaceContainerLight,
-    surfaceContainerHigh = surfaceContainerHighLight,
-    surfaceContainerHighest = surfaceContainerHighestLight,
+    surfaceContainer = Color.surfaceContainerLight,
+    surfaceContainerHigh = Color.surfaceContainerHighLight,
+    surfaceContainerHighest = Color.surfaceContainerHighestLight,
 
-    outline = outlineLight,
-    outlineVariant = outlineVariantLight,
+    outline = Color.outlineLight,
+    outlineVariant = Color.outlineVariantLight,
 
-    inverseSurface = inverseSurfaceLight,
-    inverseOnSurface = inverseOnSurfaceLight,
-    inversePrimary = inversePrimaryLight,
+    inverseSurface = Color.inverseSurfaceLight,
+    inverseOnSurface = Color.inverseOnSurfaceLight,
+    inversePrimary = Color.inversePrimaryLight,
 
-    surfaceTint = primaryLight,
-    scrim = onSurfaceLight.copy(alpha = 0.8f)
+    surfaceTint = Color.primaryLight,
+    scrim = Color.onSurfaceLight.copy(alpha = 0.8f)
 )
 
-// Material 3 Dark Color Scheme for Plink
-private val PlinkDarkColorScheme = darkColorScheme(
-    primary = primaryDark,
-    onPrimary = onPrimaryDark,
-    primaryContainer = primaryContainerDark,
-    onPrimaryContainer = onPrimaryContainerDark,
+private val DarkColorScheme = darkColorScheme(
+    primary = Color.primaryDark,
+    onPrimary = Color.onPrimaryDark,
+    primaryContainer = Color.primaryContainerDark,
+    onPrimaryContainer = Color.onPrimaryContainerDark,
 
-    secondary = secondaryDark,
-    onSecondary = onSecondaryDark,
-    secondaryContainer = secondaryContainerDark,
-    onSecondaryContainer = onSecondaryContainerDark,
+    secondary = Color.secondaryDark,
+    onSecondary = Color.onSecondaryDark,
+    secondaryContainer = Color.secondaryContainerDark,
+    onSecondaryContainer = Color.onSecondaryContainerDark,
 
-    tertiary = tertiaryDark,
-    onTertiary = onTertiaryDark,
-    tertiaryContainer = tertiaryContainerDark,
-    onTertiaryContainer = onTertiaryContainerDark,
+    tertiary = Color.tertiaryDark,
+    onTertiary = Color.onTertiaryDark,
+    tertiaryContainer = Color.tertiaryContainerDark,
+    onTertiaryContainer = Color.onTertiaryContainerDark,
 
-    error = errorDark,
-    onError = onErrorDark,
-    errorContainer = errorContainerDark,
-    onErrorContainer = onErrorContainerDark,
+    error = Color.errorDark,
+    onError = Color.onErrorDark,
+    errorContainer = Color.errorContainerDark,
+    onErrorContainer = Color.onErrorContainerDark,
 
-    background = backgroundDark,
-    onBackground = onSurfaceDark,
+    background = Color.backgroundDark,
+    onBackground = Color.onSurfaceDark,
 
-    surface = surfaceDark,
-    onSurface = onSurfaceDark,
-    surfaceVariant = surfaceContainerDark,
-    onSurfaceVariant = onSurfaceVariantDark,
+    surface = Color.surfaceDark,
+    onSurface = Color.onSurfaceDark,
+    surfaceVariant = Color.surfaceContainerDark,
+    onSurfaceVariant = Color.onSurfaceVariantDark,
 
-    surfaceContainer = surfaceContainerDark,
-    surfaceContainerHigh = surfaceContainerHighDark,
-    surfaceContainerHighest = surfaceContainerHighestDark,
+    surfaceContainer = Color.surfaceContainerDark,
+    surfaceContainerHigh = Color.surfaceContainerHighDark,
+    surfaceContainerHighest = Color.surfaceContainerHighestDark,
 
-    outline = outlineDark,
-    outlineVariant = outlineVariantDark,
+    outline = Color.outlineDark,
+    outlineVariant = Color.outlineVariantDark,
 
-    inverseSurface = inverseSurfaceDark,
-    inverseOnSurface = inverseOnSurfaceDark,
-    inversePrimary = inversePrimaryDark,
+    inverseSurface = Color.inverseSurfaceDark,
+    inverseOnSurface = Color.inverseOnSurfaceDark,
+    inversePrimary = Color.inversePrimaryDark,
 
-    surfaceTint = primaryDark,
-    scrim = onSurfaceDark.copy(alpha = 0.8f)
+    surfaceTint = Color.primaryDark,
+    scrim = Color.onSurfaceDark.copy(alpha = 0.8f)
 )
 
 @Composable
 fun PlinkTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
@@ -119,18 +114,15 @@ fun PlinkTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> PlinkDarkColorScheme
-        else -> PlinkLightColorScheme
+        darkTheme -> DarkColorScheme
+        else -> LightColorScheme
     }
 
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            // Enable edge-to-edge experience
-            WindowCompat.setDecorFitsSystemWindows(window, false)
 
-            // Set proper status bar appearance
             WindowCompat.getInsetsController(window, view).apply {
                 isAppearanceLightStatusBars = !darkTheme
                 isAppearanceLightNavigationBars = !darkTheme
@@ -140,7 +132,7 @@ fun PlinkTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = PlinkTypography,
+        typography = TextStyle.Typography,
         shapes = gameShapes,
         content = content
     )

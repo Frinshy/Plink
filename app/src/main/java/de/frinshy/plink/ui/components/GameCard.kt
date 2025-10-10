@@ -2,24 +2,16 @@ package de.frinshy.plink.ui.components
 
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import de.frinshy.plink.ui.theme.Elevation
-import de.frinshy.plink.ui.theme.PlinkTheme
 
-/**
- * A reusable elevated card component with consistent styling across the app.
- * Supports different container colors and elevation levels.
- */
+
 @Composable
 fun GameCard(
     modifier: Modifier = Modifier,
@@ -28,20 +20,21 @@ fun GameCard(
     contentColor: Color = MaterialTheme.colorScheme.onSurface,
     content: @Composable ColumnScope.() -> Unit
 ) {
+    val elevationSpec = CardDefaults.elevatedCardElevation(defaultElevation = elevation)
+    val colors = CardDefaults.elevatedCardColors(
+        containerColor = containerColor,
+        contentColor = contentColor
+    )
+
     ElevatedCard(
         modifier = modifier.fillMaxWidth(),
-        elevation = CardDefaults.elevatedCardElevation(defaultElevation = elevation),
-        colors = CardDefaults.elevatedCardColors(
-            containerColor = containerColor,
-            contentColor = contentColor
-        ),
+        elevation = elevationSpec,
+        colors = colors,
         content = content
     )
 }
 
-/**
- * A primary game card with the app's primary container colors.
- */
+
 @Composable
 fun PrimaryGameCard(
     modifier: Modifier = Modifier,
@@ -57,9 +50,7 @@ fun PrimaryGameCard(
     )
 }
 
-/**
- * A secondary game card with the app's secondary container colors.
- */
+
 @Composable
 fun SecondaryGameCard(
     modifier: Modifier = Modifier,
@@ -73,32 +64,4 @@ fun SecondaryGameCard(
         contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
         content = content
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GameCardPreview() {
-    PlinkTheme {
-        PrimaryGameCard {
-            Text(
-                text = "Primary Game Card",
-                modifier = Modifier.padding(16.dp),
-                style = MaterialTheme.typography.titleMedium
-            )
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SecondaryGameCardPreview() {
-    PlinkTheme {
-        SecondaryGameCard {
-            Text(
-                text = "Secondary Game Card",
-                modifier = Modifier.padding(16.dp),
-                style = MaterialTheme.typography.titleMedium
-            )
-        }
-    }
 }
